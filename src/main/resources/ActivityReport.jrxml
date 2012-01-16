@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ActivityReport" language="groovy" pageWidth="1000" pageHeight="1800" columnWidth="960" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="914"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+     ACTIVITY."NAME" AS ACTIVITY_NAME,
+     ACTIVITY."MIN_EXEC_TIME" AS ACTIVITY_MIN_EXEC_TIME,
+     ACTIVITY."AVG_EXEC_TIME" AS ACTIVITY_AVG_EXEC_TIME,
+     ACTIVITY."MAX_EXEC_TIME" AS ACTIVITY_MAX_EXEC_TIME,
+     ACTIVITY."MIN_WAIT_TIME" AS ACTIVITY_MIN_WAIT_TIME,
+     ACTIVITY."AVG_WAIT_TIME" AS ACTIVITY_AVG_WAIT_TIME,
+     ACTIVITY."MAX_WAIT_TIME" AS ACTIVITY_MAX_WAIT_TIME,
+     ACTIVITY."TOTAL_EXEC_TIME" AS ACTIVITY_TOTAL_EXEC_TIME,
+     ACTIVITY."TOTAL_WAIT_TIME" AS ACTIVITY_TOTAL_WAIT_TIME,
+     ACTIVITY_TIME."TIME" AS ACTIVITY_TIME_TIME,
+     ACTIVITY_TIME."NAME" AS ACTIVITY_TIME_NAME,
+     ACTIVITY_TIME."MAXIMUM_TIME" AS ACTIVITY_TIME_MAXIMUM_TIME,
+     ACTIVITY_TIME."ESTIMATED_TIME" AS ACTIVITY_TIME_ESTIMATED_TIME,
+     ACTIVITY_TIME."MIN_EXEC_TIME" AS ACTIVITY_TIME_MIN_EXEC_TIME,
+     ACTIVITY_TIME."AVG_EXEC_TIME" AS ACTIVITY_TIME_AVG_EXEC_TIME,
+     ACTIVITY_TIME."MAX_EXEC_TIME" AS ACTIVITY_TIME_MAX_EXEC_TIME,
+     ACTIVITY_TIME."MIN_WAIT_TIME" AS ACTIVITY_TIME_MIN_WAIT_TIME,
+     ACTIVITY_TIME."AVG_WAIT_TIME" AS ACTIVITY_TIME_AVG_WAIT_TIME,
+     ACTIVITY_TIME."MAX_WAIT_TIME" AS ACTIVITY_TIME_MAX_WAIT_TIME
+FROM
+     "APP"."ACTIVITY" ACTIVITY,
+     "APP"."ACTIVITY_TIME" ACTIVITY_TIME
+WHERE
+	ACTIVITY."NAME" = ACTIVITY_TIME."NAME"
+ORDER BY
+	ACTIVITY."NAME"]]>
+	</queryString>
+	<field name="ACTIVITY_NAME" class="java.lang.String"/>
+	<field name="ACTIVITY_MIN_EXEC_TIME" class="java.lang.Float"/>
+	<field name="ACTIVITY_AVG_EXEC_TIME" class="java.lang.Float"/>
+	<field name="ACTIVITY_MAX_EXEC_TIME" class="java.lang.Float"/>
+	<field name="ACTIVITY_MIN_WAIT_TIME" class="java.lang.Float"/>
+	<field name="ACTIVITY_AVG_WAIT_TIME" class="java.lang.Float"/>
+	<field name="ACTIVITY_MAX_WAIT_TIME" class="java.lang.Float"/>
+	<field name="ACTIVITY_TOTAL_EXEC_TIME" class="java.lang.Float"/>
+	<field name="ACTIVITY_TOTAL_WAIT_TIME" class="java.lang.Float"/>
+	<field name="ACTIVITY_TIME_TIME" class="java.sql.Timestamp"/>
+	<field name="ACTIVITY_TIME_NAME" class="java.lang.String"/>
+	<field name="ACTIVITY_TIME_MAXIMUM_TIME" class="java.lang.Float"/>
+	<field name="ACTIVITY_TIME_ESTIMATED_TIME" class="java.lang.Float"/>
+	<field name="ACTIVITY_TIME_MIN_EXEC_TIME" class="java.lang.Float"/>
+	<field name="ACTIVITY_TIME_AVG_EXEC_TIME" class="java.lang.Float"/>
+	<field name="ACTIVITY_TIME_MAX_EXEC_TIME" class="java.lang.Float"/>
+	<field name="ACTIVITY_TIME_MIN_WAIT_TIME" class="java.lang.Float"/>
+	<field name="ACTIVITY_TIME_AVG_WAIT_TIME" class="java.lang.Float"/>
+	<field name="ACTIVITY_TIME_MAX_WAIT_TIME" class="java.lang.Float"/>
+	<variable name="ACTIVITY_TIME_NAME_1" class="java.lang.Integer" resetType="Group" resetGroup="ACTIVITY_GROUP" calculation="Count">
+		<variableExpression><![CDATA[$F{ACTIVITY_TIME_NAME}]]></variableExpression>
+	</variable>
+	<variable name="ACTIVITY_TIME_TIME_1" class="java.lang.Integer" resetType="Group" resetGroup="ACTIVITY_GROUP" calculation="Count">
+		<variableExpression><![CDATA[$F{ACTIVITY_TIME_TIME}]]></variableExpression>
+	</variable>
+	<group name="ACTIVITY_GROUP">
+		<groupExpression><![CDATA[$F{ACTIVITY_TIME_NAME}]]></groupExpression>
+		<groupFooter>
+			<band height="1211">
+				<timeSeriesChart>
+					<chart>
+						<reportElement x="0" y="46" width="960" height="284"/>
+						<chartTitle>
+							<font size="14"/>
+							<titleExpression><![CDATA[$F{ACTIVITY_TIME_NAME}  + " Instances Execution Time"]]></titleExpression>
+						</chartTitle>
+						<chartSubtitle>
+							<subtitleExpression><![CDATA["represents the execution times of simulated activity instances through the total simulation timespan "]]></subtitleExpression>
+						</chartSubtitle>
+						<chartLegend/>
+					</chart>
+					<timeSeriesDataset timePeriod="Hour">
+						<dataset resetType="Group" resetGroup="ACTIVITY_GROUP" incrementType="Group" incrementGroup="ACTIVITY_TIME_GROUP"/>
+						<timeSeries>
+							<seriesExpression><![CDATA["Minimum"]]></seriesExpression>
+							<timePeriodExpression><![CDATA[$F{ACTIVITY_TIME_TIME}]]></timePeriodExpression>
+							<valueExpression><![CDATA[$F{ACTIVITY_TIME_MIN_EXEC_TIME}]]></valueExpression>
+						</timeSeries>
+						<timeSeries>
+							<seriesExpression><![CDATA["Average"]]></seriesExpression>
+							<timePeriodExpression><![CDATA[$F{ACTIVITY_TIME_TIME}]]></timePeriodExpression>
+							<valueExpression><![CDATA[$F{ACTIVITY_TIME_AVG_EXEC_TIME}]]></valueExpression>
+						</timeSeries>
+						<timeSeries>
+							<seriesExpression><![CDATA["Maximum"]]></seriesExpression>
+							<timePeriodExpression><![CDATA[$F{ACTIVITY_TIME_TIME}]]></timePeriodExpression>
+							<valueExpression><![CDATA[$F{ACTIVITY_TIME_MAX_EXEC_TIME}]]></valueExpression>
+						</timeSeries>
+						<timeSeries>
+							<seriesExpression><![CDATA["Estimated Time"]]></seriesExpression>
+							<timePeriodExpression><![CDATA[$F{ACTIVITY_TIME_TIME}]]></timePeriodExpression>
+							<valueExpression><![CDATA[$F{ACTIVITY_TIME_ESTIMATED_TIME}]]></valueExpression>
+						</timeSeries>
+						<timeSeries>
+							<seriesExpression><![CDATA["Threshold"]]></seriesExpression>
+							<timePeriodExpression><![CDATA[$F{ACTIVITY_TIME_TIME}]]></timePeriodExpression>
+							<valueExpression><![CDATA[$F{ACTIVITY_TIME_MAXIMUM_TIME}]]></valueExpression>
+						</timeSeries>
+					</timeSeriesDataset>
+					<timeSeriesPlot isShowShapes="false">
+						<plot>
+							<seriesColor seriesOrder="0" color="#009999"/>
+							<seriesColor seriesOrder="1" color="#0000FF"/>
+							<seriesColor seriesOrder="2" color="#CC0000"/>
+							<seriesColor seriesOrder="3" color="#33CC00"/>
+							<seriesColor seriesOrder="4" color="#CC6600"/>
+						</plot>
+						<timeAxisFormat>
+							<axisFormat>
+								<labelFont/>
+								<tickLabelFont/>
+							</axisFormat>
+						</timeAxisFormat>
+						<valueAxisLabelExpression><![CDATA["Execution Time in Hours"]]></valueAxisLabelExpression>
+						<valueAxisFormat>
+							<axisFormat tickLabelMask="##.#">
+								<labelFont/>
+								<tickLabelFont/>
+							</axisFormat>
+						</valueAxisFormat>
+					</timeSeriesPlot>
+				</timeSeriesChart>
+				<textField>
+					<reportElement x="0" y="0" width="960" height="20"/>
+					<textElement textAlignment="Center">
+						<font size="14"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{ACTIVITY_TIME_NAME} +" Report"]]></textFieldExpression>
+				</textField>
+				<timeSeriesChart>
+					<chart>
+						<reportElement x="0" y="623" width="960" height="323"/>
+						<chartTitle>
+							<font size="14"/>
+							<titleExpression><![CDATA[$F{ACTIVITY_TIME_NAME}  + " Instances Waiting Time"]]></titleExpression>
+						</chartTitle>
+						<chartSubtitle>
+							<subtitleExpression><![CDATA["represents the waiting times of simulated activity instances through the total simulation timespan "]]></subtitleExpression>
+						</chartSubtitle>
+						<chartLegend/>
+					</chart>
+					<timeSeriesDataset timePeriod="Hour">
+						<dataset resetType="Group" resetGroup="ACTIVITY_GROUP" incrementType="Group" incrementGroup="ACTIVITY_TIME_GROUP"/>
+						<timeSeries>
+							<seriesExpression><![CDATA["Minimum"]]></seriesExpression>
+							<timePeriodExpression><![CDATA[$F{ACTIVITY_TIME_TIME}]]></timePeriodExpression>
+							<valueExpression><![CDATA[$F{ACTIVITY_TIME_MIN_WAIT_TIME}]]></valueExpression>
+						</timeSeries>
+						<timeSeries>
+							<seriesExpression><![CDATA["Average"]]></seriesExpression>
+							<timePeriodExpression><![CDATA[$F{ACTIVITY_TIME_TIME}]]></timePeriodExpression>
+							<valueExpression><![CDATA[$F{ACTIVITY_TIME_AVG_WAIT_TIME}]]></valueExpression>
+						</timeSeries>
+						<timeSeries>
+							<seriesExpression><![CDATA["Maximum"]]></seriesExpression>
+							<timePeriodExpression><![CDATA[$F{ACTIVITY_TIME_TIME}]]></timePeriodExpression>
+							<valueExpression><![CDATA[$F{ACTIVITY_TIME_MAX_WAIT_TIME}]]></valueExpression>
+						</timeSeries>
+					</timeSeriesDataset>
+					<timeSeriesPlot isShowShapes="false">
+						<plot>
+							<seriesColor seriesOrder="0" color="#009999"/>
+							<seriesColor seriesOrder="1" color="#0000FF"/>
+							<seriesColor seriesOrder="2" color="#CC0000"/>
+							<seriesColor seriesOrder="3" color="#33CC00"/>
+							<seriesColor seriesOrder="4" color="#CC6600"/>
+						</plot>
+						<timeAxisFormat>
+							<axisFormat>
+								<labelFont/>
+								<tickLabelFont/>
+							</axisFormat>
+						</timeAxisFormat>
+						<valueAxisLabelExpression><![CDATA["Waiting Time in Hours"]]></valueAxisLabelExpression>
+						<valueAxisFormat>
+							<axisFormat tickLabelMask="##.#">
+								<labelFont/>
+								<tickLabelFont/>
+							</axisFormat>
+						</valueAxisFormat>
+					</timeSeriesPlot>
+				</timeSeriesChart>
+				<barChart>
+					<chart customizerClass="org.bonitasoft.simulation.reporting.jasperreport.BarChartVisibleBarLabel">
+						<reportElement x="0" y="351" width="960" height="209"/>
+						<chartTitle>
+							<font size="14"/>
+							<titleExpression><![CDATA[$F{ACTIVITY_TIME_NAME}  + " Execution Time By Instance"]]></titleExpression>
+						</chartTitle>
+						<chartSubtitle>
+							<subtitleExpression><![CDATA["represents the key execution times of an activity instance regarding all the executed instances"]]></subtitleExpression>
+						</chartSubtitle>
+						<chartLegend/>
+					</chart>
+					<categoryDataset>
+						<dataset resetType="Group" resetGroup="ACTIVITY_GROUP"/>
+						<categorySeries>
+							<seriesExpression><![CDATA["Minimum"]]></seriesExpression>
+							<categoryExpression><![CDATA[""]]></categoryExpression>
+							<valueExpression><![CDATA[$F{ACTIVITY_MIN_EXEC_TIME}]]></valueExpression>
+						</categorySeries>
+						<categorySeries>
+							<seriesExpression><![CDATA["Average"]]></seriesExpression>
+							<categoryExpression><![CDATA[""]]></categoryExpression>
+							<valueExpression><![CDATA[$F{ACTIVITY_AVG_EXEC_TIME}]]></valueExpression>
+						</categorySeries>
+						<categorySeries>
+							<seriesExpression><![CDATA["Maximum"]]></seriesExpression>
+							<categoryExpression><![CDATA[""]]></categoryExpression>
+							<valueExpression><![CDATA[$F{ACTIVITY_MAX_EXEC_TIME}]]></valueExpression>
+						</categorySeries>
+					</categoryDataset>
+					<barPlot>
+						<plot>
+							<seriesColor seriesOrder="0" color="#009999"/>
+							<seriesColor seriesOrder="1" color="#0000FF"/>
+							<seriesColor seriesOrder="2" color="#CC0000"/>
+							<seriesColor seriesOrder="3" color="#33CC00"/>
+							<seriesColor seriesOrder="4" color="#CC6600"/>
+						</plot>
+						<itemLabel color="#000000" backgroundColor="#FFFFFF"/>
+						<categoryAxisFormat>
+							<axisFormat>
+								<labelFont/>
+								<tickLabelFont/>
+							</axisFormat>
+						</categoryAxisFormat>
+						<valueAxisLabelExpression><![CDATA["Execution Time in Hours"]]></valueAxisLabelExpression>
+						<valueAxisFormat>
+							<axisFormat tickLabelMask="##.#" verticalTickLabels="true">
+								<labelFont/>
+								<tickLabelFont/>
+							</axisFormat>
+						</valueAxisFormat>
+					</barPlot>
+				</barChart>
+				<barChart>
+					<chart customizerClass="org.bonitasoft.simulation.reporting.jasperreport.BarChartVisibleBarLabel">
+						<reportElement x="0" y="961" width="960" height="239"/>
+						<chartTitle>
+							<font size="14"/>
+							<titleExpression><![CDATA[$F{ACTIVITY_TIME_NAME}  + " Waiting Time By Instance"]]></titleExpression>
+						</chartTitle>
+						<chartSubtitle>
+							<subtitleExpression><![CDATA["represents the key waiting times of an activity instance regarding all the executed instances"]]></subtitleExpression>
+						</chartSubtitle>
+						<chartLegend/>
+					</chart>
+					<categoryDataset>
+						<dataset resetType="Group" resetGroup="ACTIVITY_GROUP"/>
+						<categorySeries>
+							<seriesExpression><![CDATA["Minimum"]]></seriesExpression>
+							<categoryExpression><![CDATA[""]]></categoryExpression>
+							<valueExpression><![CDATA[$F{ACTIVITY_MIN_WAIT_TIME}]]></valueExpression>
+						</categorySeries>
+						<categorySeries>
+							<seriesExpression><![CDATA["Average"]]></seriesExpression>
+							<categoryExpression><![CDATA[""]]></categoryExpression>
+							<valueExpression><![CDATA[$F{ACTIVITY_AVG_WAIT_TIME}]]></valueExpression>
+						</categorySeries>
+						<categorySeries>
+							<seriesExpression><![CDATA["Maximum"]]></seriesExpression>
+							<categoryExpression><![CDATA[""]]></categoryExpression>
+							<valueExpression><![CDATA[$F{ACTIVITY_MAX_WAIT_TIME}]]></valueExpression>
+						</categorySeries>
+					</categoryDataset>
+					<barPlot>
+						<plot>
+							<seriesColor seriesOrder="0" color="#009999"/>
+							<seriesColor seriesOrder="1" color="#0000FF"/>
+							<seriesColor seriesOrder="2" color="#CC0000"/>
+							<seriesColor seriesOrder="3" color="#33CC00"/>
+							<seriesColor seriesOrder="4" color="#CC6600"/>
+						</plot>
+						<itemLabel color="#000000" backgroundColor="#FFFFFF">
+							<font size="10"/>
+						</itemLabel>
+						<categoryAxisFormat>
+							<axisFormat>
+								<labelFont/>
+								<tickLabelFont/>
+							</axisFormat>
+						</categoryAxisFormat>
+						<valueAxisLabelExpression><![CDATA["Waiting Time in Hours"]]></valueAxisLabelExpression>
+						<valueAxisFormat>
+							<axisFormat tickLabelMask="#.##">
+								<labelFont/>
+								<tickLabelFont/>
+							</axisFormat>
+						</valueAxisFormat>
+					</barPlot>
+				</barChart>
+				<break>
+					<reportElement x="0" y="1133" width="960" height="1"/>
+				</break>
+			</band>
+		</groupFooter>
+	</group>
+	<group name="ACTIVITY_TIME_GROUP">
+		<groupExpression><![CDATA[$F{ACTIVITY_TIME_TIME}]]></groupExpression>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<summary>
+		<band height="52">
+			<subreport runToBottom="true">
+				<reportElement x="-20" y="0" width="999" height="52" isPrintInFirstWholeBand="true"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "ResourceReport.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</summary>
+</jasperReport>

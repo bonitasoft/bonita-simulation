@@ -1,0 +1,536 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ResourceReport" language="groovy" pageWidth="1000" pageHeight="1800" columnWidth="960" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="26"/>
+	<property name="ireport.y" value="585"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+     RESOURCE."TOTAL_USE" AS RESOURCE_TOTAL_USE,
+     RESOURCE."NAME" AS RESOURCE_NAME,
+     RESOURCE."COST_UNIT" AS RESOURCE_COST_UNIT,
+     RESOURCE."MIN_USE" AS RESOURCE_MIN_USE,
+     RESOURCE."AVG_USE" AS RESOURCE_AVG_USE,
+     RESOURCE."MAX_USE" AS RESOURCE_MAX_USE,
+     RESOURCE."TOTAL_COST" AS RESOURCE_TOTAL_COST,
+     RESOURCE."MIN_COST" AS RESOURCE_MIN_COST,
+     RESOURCE."AVG_COST" AS RESOURCE_AVG_COST,
+     RESOURCE."MAX_COST" AS RESOURCE_MAX_COST,
+     RESOURCE."TOTAL_CONS" AS RESOURCE_TOTAL_CONS,
+     RESOURCE."MIN_CONS" AS RESOURCE_MIN_CONS,
+     RESOURCE."MAX_CONS" AS RESOURCE_MAX_CONS,
+     RESOURCE."AVG_CONS" AS RESOURCE_AVG_CONS,
+     RESOURCE_TIME."COST" AS RESOURCE_TIME_COST,
+     RESOURCE_TIME."TARGET_RES" AS RESOURCE_TIME_TARGET_RES,
+     RESOURCE_TIME."MAX_RES" AS RESOURCE_TIME_MAX_RES,
+     RESOURCE_TIME."USE" AS RESOURCE_TIME_USE,
+     RESOURCE_TIME."AVG_CONS" AS RESOURCE_TIME_AVG_CONS,
+     RESOURCE_TIME."MAX_CONS" AS RESOURCE_TIME_MAX_CONS,
+     RESOURCE_TIME."MIN_CONS" AS RESOURCE_TIME_MIN_CONS,
+     RESOURCE_TIME."TIME" AS RESOURCE_TIME_TIME,
+     RESOURCE_TIME."NAME" AS RESOURCE_TIME_NAME
+FROM
+     "APP"."RESOURCE" RESOURCE,
+     "APP"."RESOURCE_TIME" RESOURCE_TIME
+WHERE
+      RESOURCE."NAME" = RESOURCE_TIME."NAME"
+ORDER BY
+      RESOURCE."NAME"]]>
+	</queryString>
+	<field name="RESOURCE_TOTAL_USE" class="java.lang.Double"/>
+	<field name="RESOURCE_NAME" class="java.lang.String"/>
+	<field name="RESOURCE_COST_UNIT" class="java.lang.String"/>
+	<field name="RESOURCE_MIN_USE" class="java.lang.Double"/>
+	<field name="RESOURCE_AVG_USE" class="java.lang.Double"/>
+	<field name="RESOURCE_MAX_USE" class="java.lang.Double"/>
+	<field name="RESOURCE_TOTAL_COST" class="java.lang.Double"/>
+	<field name="RESOURCE_MIN_COST" class="java.lang.Double"/>
+	<field name="RESOURCE_AVG_COST" class="java.lang.Double"/>
+	<field name="RESOURCE_MAX_COST" class="java.lang.Double"/>
+	<field name="RESOURCE_TOTAL_CONS" class="java.lang.Integer"/>
+	<field name="RESOURCE_MIN_CONS" class="java.lang.Integer"/>
+	<field name="RESOURCE_MAX_CONS" class="java.lang.Integer"/>
+	<field name="RESOURCE_AVG_CONS" class="java.lang.Double"/>
+	<field name="RESOURCE_TIME_COST" class="java.lang.Double"/>
+	<field name="RESOURCE_TIME_TARGET_RES" class="java.lang.Integer"/>
+	<field name="RESOURCE_TIME_MAX_RES" class="java.lang.Integer"/>
+	<field name="RESOURCE_TIME_USE" class="java.lang.Double"/>
+	<field name="RESOURCE_TIME_AVG_CONS" class="java.lang.Double"/>
+	<field name="RESOURCE_TIME_MAX_CONS" class="java.lang.Integer"/>
+	<field name="RESOURCE_TIME_MIN_CONS" class="java.lang.Integer"/>
+	<field name="RESOURCE_TIME_TIME" class="java.sql.Timestamp"/>
+	<field name="RESOURCE_TIME_NAME" class="java.lang.String"/>
+	<group name="RESOURCE_TIME_NAME">
+		<groupExpression><![CDATA[$F{RESOURCE_TIME_NAME}]]></groupExpression>
+		<groupFooter>
+			<band height="1718">
+				<textField>
+					<reportElement x="0" y="0" width="960" height="20"/>
+					<textElement textAlignment="Center">
+						<font size="14"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{RESOURCE_TIME_NAME} + " Report"]]></textFieldExpression>
+				</textField>
+				<timeSeriesChart>
+					<chart>
+						<reportElement x="0" y="52" width="960" height="266"/>
+						<chartTitle position="Top">
+							<font size="14"/>
+							<titleExpression><![CDATA[$F{RESOURCE_TIME_NAME} + " Consumption"]]></titleExpression>
+						</chartTitle>
+						<chartSubtitle>
+							<subtitleExpression><![CDATA["represents the number of resource instance used through the total simulation timespan"]]></subtitleExpression>
+						</chartSubtitle>
+						<chartLegend/>
+					</chart>
+					<timeSeriesDataset timePeriod="Hour">
+						<dataset resetType="Group" resetGroup="RESOURCE_TIME_NAME" incrementType="Group" incrementGroup="RESOURCE_TIME_TIME"/>
+						<timeSeries>
+							<seriesExpression><![CDATA["Minimum"]]></seriesExpression>
+							<timePeriodExpression><![CDATA[$F{RESOURCE_TIME_TIME}]]></timePeriodExpression>
+							<valueExpression><![CDATA[$F{RESOURCE_TIME_MIN_CONS}]]></valueExpression>
+						</timeSeries>
+						<timeSeries>
+							<seriesExpression><![CDATA["Average"]]></seriesExpression>
+							<timePeriodExpression><![CDATA[$F{RESOURCE_TIME_TIME}]]></timePeriodExpression>
+							<valueExpression><![CDATA[$F{RESOURCE_TIME_AVG_CONS}]]></valueExpression>
+						</timeSeries>
+						<timeSeries>
+							<seriesExpression><![CDATA["Maximum"]]></seriesExpression>
+							<timePeriodExpression><![CDATA[$F{RESOURCE_TIME_TIME}]]></timePeriodExpression>
+							<valueExpression><![CDATA[$F{RESOURCE_TIME_MAX_CONS}]]></valueExpression>
+						</timeSeries>
+						<timeSeries>
+							<seriesExpression><![CDATA["Target"]]></seriesExpression>
+							<timePeriodExpression><![CDATA[$F{RESOURCE_TIME_TIME}]]></timePeriodExpression>
+							<valueExpression><![CDATA[$F{RESOURCE_TIME_TARGET_RES}]]></valueExpression>
+						</timeSeries>
+						<timeSeries>
+							<seriesExpression><![CDATA["Quantity"]]></seriesExpression>
+							<timePeriodExpression><![CDATA[$F{RESOURCE_TIME_TIME}]]></timePeriodExpression>
+							<valueExpression><![CDATA[$F{RESOURCE_TIME_MAX_RES}]]></valueExpression>
+						</timeSeries>
+					</timeSeriesDataset>
+					<timeSeriesPlot isShowShapes="false">
+						<plot>
+							<seriesColor seriesOrder="0" color="#009999"/>
+							<seriesColor seriesOrder="1" color="#0000FF"/>
+							<seriesColor seriesOrder="2" color="#CC0000"/>
+							<seriesColor seriesOrder="3" color="#33CC00"/>
+							<seriesColor seriesOrder="4" color="#CC6600"/>
+						</plot>
+						<timeAxisFormat>
+							<axisFormat>
+								<labelFont/>
+								<tickLabelFont/>
+							</axisFormat>
+						</timeAxisFormat>
+						<valueAxisLabelExpression><![CDATA["Number of Resource"]]></valueAxisLabelExpression>
+						<valueAxisFormat>
+							<axisFormat tickLabelMask="#.#">
+								<labelFont/>
+								<tickLabelFont/>
+							</axisFormat>
+						</valueAxisFormat>
+					</timeSeriesPlot>
+				</timeSeriesChart>
+				<break>
+					<reportElement x="0" y="1698" width="960" height="1"/>
+				</break>
+				<timeSeriesChart>
+					<chart isShowLegend="false">
+						<reportElement x="0" y="642" width="960" height="266"/>
+						<chartTitle position="Top">
+							<font size="14"/>
+							<titleExpression><![CDATA[$F{RESOURCE_TIME_NAME} + " Cost"]]></titleExpression>
+						</chartTitle>
+						<chartSubtitle>
+							<subtitleExpression><![CDATA["represents the cost of the resource through the total simulation timespan"]]></subtitleExpression>
+						</chartSubtitle>
+						<chartLegend/>
+					</chart>
+					<timeSeriesDataset timePeriod="Hour">
+						<dataset resetType="Group" resetGroup="RESOURCE_TIME_NAME" incrementType="Group" incrementGroup="RESOURCE_TIME_TIME"/>
+						<timeSeries>
+							<seriesExpression><![CDATA["Cost"]]></seriesExpression>
+							<timePeriodExpression><![CDATA[$F{RESOURCE_TIME_TIME}]]></timePeriodExpression>
+							<valueExpression><![CDATA[$F{RESOURCE_TIME_COST}]]></valueExpression>
+						</timeSeries>
+					</timeSeriesDataset>
+					<timeSeriesPlot isShowShapes="false">
+						<plot>
+							<seriesColor seriesOrder="0" color="#1F97B6"/>
+						</plot>
+						<timeAxisFormat>
+							<axisFormat>
+								<labelFont/>
+								<tickLabelFont/>
+							</axisFormat>
+						</timeAxisFormat>
+						<valueAxisLabelExpression><![CDATA["Amount in "+$F{RESOURCE_COST_UNIT}]]></valueAxisLabelExpression>
+						<valueAxisFormat>
+							<axisFormat tickLabelMask="#.##">
+								<labelFont/>
+								<tickLabelFont/>
+							</axisFormat>
+						</valueAxisFormat>
+					</timeSeriesPlot>
+				</timeSeriesChart>
+				<timeSeriesChart>
+					<chart isShowLegend="false">
+						<reportElement x="0" y="1192" width="960" height="266"/>
+						<chartTitle position="Top">
+							<font size="14"/>
+							<titleExpression><![CDATA[$F{RESOURCE_TIME_NAME} + " Utilization"]]></titleExpression>
+						</chartTitle>
+						<chartSubtitle>
+							<subtitleExpression><![CDATA["represents the rate of utilization of the resource through the total simulation timespan"]]></subtitleExpression>
+						</chartSubtitle>
+						<chartLegend/>
+					</chart>
+					<timeSeriesDataset timePeriod="Hour">
+						<dataset resetType="Group" resetGroup="RESOURCE_TIME_NAME" incrementType="Group" incrementGroup="RESOURCE_TIME_TIME"/>
+						<timeSeries>
+							<seriesExpression><![CDATA["Use"]]></seriesExpression>
+							<timePeriodExpression><![CDATA[$F{RESOURCE_TIME_TIME}]]></timePeriodExpression>
+							<valueExpression><![CDATA[$F{RESOURCE_TIME_USE}]]></valueExpression>
+						</timeSeries>
+					</timeSeriesDataset>
+					<timeSeriesPlot isShowShapes="false">
+						<plot>
+							<seriesColor seriesOrder="0" color="#0000FF"/>
+						</plot>
+						<timeAxisFormat>
+							<axisFormat>
+								<labelFont/>
+								<tickLabelFont/>
+							</axisFormat>
+						</timeAxisFormat>
+						<valueAxisLabelExpression><![CDATA["Utilization"]]></valueAxisLabelExpression>
+						<valueAxisFormat>
+							<axisFormat tickLabelMask="#.## %">
+								<labelFont/>
+								<tickLabelFont/>
+							</axisFormat>
+						</valueAxisFormat>
+					</timeSeriesPlot>
+				</timeSeriesChart>
+				<barChart>
+					<chart customizerClass="org.bonitasoft.simulation.reporting.jasperreport.BarChartVisibleBarLabel">
+						<reportElement x="0" y="362" width="625" height="205"/>
+						<chartTitle position="Top">
+							<font size="14"/>
+							<titleExpression><![CDATA[$F{RESOURCE_TIME_NAME} + " Consumption By Instance"]]></titleExpression>
+						</chartTitle>
+						<chartSubtitle>
+							<subtitleExpression><![CDATA["represents the key figures of the resource consumption for a process instance reagrding all the executed instances"]]></subtitleExpression>
+						</chartSubtitle>
+						<chartLegend/>
+					</chart>
+					<categoryDataset>
+						<dataset resetType="Group" resetGroup="RESOURCE_TIME_NAME"/>
+						<categorySeries>
+							<seriesExpression><![CDATA["Minimum"]]></seriesExpression>
+							<categoryExpression><![CDATA[""]]></categoryExpression>
+							<valueExpression><![CDATA[$F{RESOURCE_MIN_CONS}]]></valueExpression>
+						</categorySeries>
+						<categorySeries>
+							<seriesExpression><![CDATA["Average"]]></seriesExpression>
+							<categoryExpression><![CDATA[""]]></categoryExpression>
+							<valueExpression><![CDATA[$F{RESOURCE_AVG_CONS}]]></valueExpression>
+						</categorySeries>
+						<categorySeries>
+							<seriesExpression><![CDATA["Maximum"]]></seriesExpression>
+							<categoryExpression><![CDATA[""]]></categoryExpression>
+							<valueExpression><![CDATA[$F{RESOURCE_MAX_CONS}]]></valueExpression>
+						</categorySeries>
+					</categoryDataset>
+					<barPlot>
+						<plot>
+							<seriesColor seriesOrder="0" color="#009999"/>
+							<seriesColor seriesOrder="1" color="#0000FF"/>
+							<seriesColor seriesOrder="2" color="#CC0000"/>
+							<seriesColor seriesOrder="3" color="#33CC00"/>
+							<seriesColor seriesOrder="4" color="#CC6600"/>
+						</plot>
+						<itemLabel color="#000000" backgroundColor="#FFFFFF"/>
+						<categoryAxisFormat>
+							<axisFormat>
+								<labelFont/>
+								<tickLabelFont/>
+							</axisFormat>
+						</categoryAxisFormat>
+						<valueAxisFormat>
+							<axisFormat tickLabelMask="#.#">
+								<labelFont/>
+								<tickLabelFont/>
+							</axisFormat>
+						</valueAxisFormat>
+					</barPlot>
+				</barChart>
+				<barChart>
+					<chart isShowLegend="false" customizerClass="org.bonitasoft.simulation.reporting.jasperreport.BarChartVisibleBarLabel">
+						<reportElement x="675" y="362" width="285" height="205"/>
+						<chartTitle position="Top">
+							<font size="14"/>
+							<titleExpression><![CDATA[$F{RESOURCE_TIME_NAME} + " Total Consumption"]]></titleExpression>
+						</chartTitle>
+						<chartSubtitle>
+							<subtitleExpression><![CDATA["represents the global resource consumption"]]></subtitleExpression>
+						</chartSubtitle>
+						<chartLegend/>
+					</chart>
+					<categoryDataset>
+						<dataset resetType="Group" resetGroup="RESOURCE_TIME_NAME"/>
+						<categorySeries>
+							<seriesExpression><![CDATA["Total"]]></seriesExpression>
+							<categoryExpression><![CDATA[""]]></categoryExpression>
+							<valueExpression><![CDATA[$F{RESOURCE_TOTAL_CONS}]]></valueExpression>
+						</categorySeries>
+					</categoryDataset>
+					<barPlot>
+						<plot>
+							<seriesColor seriesOrder="0" color="#009999"/>
+							<seriesColor seriesOrder="1" color="#0000FF"/>
+							<seriesColor seriesOrder="2" color="#CC0000"/>
+							<seriesColor seriesOrder="3" color="#33CC00"/>
+							<seriesColor seriesOrder="4" color="#CC6600"/>
+						</plot>
+						<itemLabel color="#000000" backgroundColor="#FFFFFF"/>
+						<categoryAxisFormat>
+							<axisFormat>
+								<labelFont/>
+								<tickLabelFont/>
+							</axisFormat>
+						</categoryAxisFormat>
+						<valueAxisFormat>
+							<axisFormat tickLabelMask="#.#">
+								<labelFont/>
+								<tickLabelFont/>
+							</axisFormat>
+						</valueAxisFormat>
+					</barPlot>
+				</barChart>
+				<barChart>
+					<chart isShowLegend="false" customizerClass="org.bonitasoft.simulation.reporting.jasperreport.BarChartVisibleBarLabel">
+						<reportElement x="675" y="929" width="285" height="205"/>
+						<chartTitle position="Top">
+							<font size="14"/>
+							<titleExpression><![CDATA[$F{RESOURCE_TIME_NAME} + " Total Cost"]]></titleExpression>
+						</chartTitle>
+						<chartSubtitle>
+							<subtitleExpression><![CDATA["represents the global resource cost"]]></subtitleExpression>
+						</chartSubtitle>
+						<chartLegend/>
+					</chart>
+					<categoryDataset>
+						<dataset resetType="Group" resetGroup="RESOURCE_TIME_NAME"/>
+						<categorySeries>
+							<seriesExpression><![CDATA["Total"]]></seriesExpression>
+							<categoryExpression><![CDATA[""]]></categoryExpression>
+							<valueExpression><![CDATA[$F{RESOURCE_TOTAL_COST}]]></valueExpression>
+						</categorySeries>
+					</categoryDataset>
+					<barPlot>
+						<plot>
+							<seriesColor seriesOrder="0" color="#009999"/>
+							<seriesColor seriesOrder="1" color="#0000FF"/>
+							<seriesColor seriesOrder="2" color="#CC0000"/>
+							<seriesColor seriesOrder="3" color="#33CC00"/>
+							<seriesColor seriesOrder="4" color="#CC6600"/>
+						</plot>
+						<itemLabel color="#000000" backgroundColor="#FFFFFF"/>
+						<categoryAxisFormat>
+							<axisFormat>
+								<labelFont/>
+								<tickLabelFont/>
+							</axisFormat>
+						</categoryAxisFormat>
+						<valueAxisLabelExpression><![CDATA["Amount in "+$F{RESOURCE_COST_UNIT}]]></valueAxisLabelExpression>
+						<valueAxisFormat>
+							<axisFormat tickLabelMask="#.##">
+								<labelFont/>
+								<tickLabelFont/>
+							</axisFormat>
+						</valueAxisFormat>
+					</barPlot>
+				</barChart>
+				<barChart>
+					<chart customizerClass="org.bonitasoft.simulation.reporting.jasperreport.BarChartVisibleBarLabel">
+						<reportElement x="0" y="929" width="625" height="205"/>
+						<chartTitle position="Top">
+							<font size="14"/>
+							<titleExpression><![CDATA[$F{RESOURCE_TIME_NAME} + " Cost By Instance"]]></titleExpression>
+						</chartTitle>
+						<chartSubtitle>
+							<subtitleExpression><![CDATA["represents the key figures of the resource cost for a process instance reagrding all the executed instances"]]></subtitleExpression>
+						</chartSubtitle>
+						<chartLegend/>
+					</chart>
+					<categoryDataset>
+						<dataset resetType="Group" resetGroup="RESOURCE_TIME_NAME"/>
+						<categorySeries>
+							<seriesExpression><![CDATA["Minimum"]]></seriesExpression>
+							<categoryExpression><![CDATA[""]]></categoryExpression>
+							<valueExpression><![CDATA[$F{RESOURCE_MIN_COST}]]></valueExpression>
+						</categorySeries>
+						<categorySeries>
+							<seriesExpression><![CDATA["Average"]]></seriesExpression>
+							<categoryExpression><![CDATA[""]]></categoryExpression>
+							<valueExpression><![CDATA[$F{RESOURCE_AVG_COST}]]></valueExpression>
+						</categorySeries>
+						<categorySeries>
+							<seriesExpression><![CDATA["Maximum"]]></seriesExpression>
+							<categoryExpression><![CDATA[""]]></categoryExpression>
+							<valueExpression><![CDATA[$F{RESOURCE_MAX_COST}]]></valueExpression>
+						</categorySeries>
+					</categoryDataset>
+					<barPlot>
+						<plot>
+							<seriesColor seriesOrder="0" color="#009999"/>
+							<seriesColor seriesOrder="1" color="#0000FF"/>
+							<seriesColor seriesOrder="2" color="#CC0000"/>
+							<seriesColor seriesOrder="3" color="#33CC00"/>
+							<seriesColor seriesOrder="4" color="#CC6600"/>
+						</plot>
+						<itemLabel color="#000000" backgroundColor="#FFFFFF"/>
+						<categoryAxisFormat>
+							<axisFormat>
+								<labelFont/>
+								<tickLabelFont/>
+							</axisFormat>
+						</categoryAxisFormat>
+						<valueAxisLabelExpression><![CDATA["Amount in "+$F{RESOURCE_COST_UNIT}]]></valueAxisLabelExpression>
+						<valueAxisFormat>
+							<axisFormat tickLabelMask="#.##">
+								<labelFont/>
+								<tickLabelFont/>
+							</axisFormat>
+						</valueAxisFormat>
+					</barPlot>
+				</barChart>
+				<barChart>
+					<chart isShowLegend="false" customizerClass="org.bonitasoft.simulation.reporting.jasperreport.BarChartVisibleBarLabel">
+						<reportElement x="675" y="1494" width="285" height="205"/>
+						<chartTitle position="Top">
+							<font size="14"/>
+							<titleExpression><![CDATA[$F{RESOURCE_TIME_NAME} + " Total Utilization"]]></titleExpression>
+						</chartTitle>
+						<chartSubtitle>
+							<subtitleExpression><![CDATA["represents the global resource utilization"]]></subtitleExpression>
+						</chartSubtitle>
+						<chartLegend/>
+					</chart>
+					<categoryDataset>
+						<dataset resetType="Group" resetGroup="RESOURCE_TIME_NAME"/>
+						<categorySeries>
+							<seriesExpression><![CDATA["Total"]]></seriesExpression>
+							<categoryExpression><![CDATA[""]]></categoryExpression>
+							<valueExpression><![CDATA[$F{RESOURCE_TOTAL_USE}]]></valueExpression>
+						</categorySeries>
+					</categoryDataset>
+					<barPlot>
+						<plot>
+							<seriesColor seriesOrder="0" color="#009999"/>
+							<seriesColor seriesOrder="1" color="#0000FF"/>
+							<seriesColor seriesOrder="2" color="#CC0000"/>
+							<seriesColor seriesOrder="3" color="#33CC00"/>
+							<seriesColor seriesOrder="4" color="#CC6600"/>
+						</plot>
+						<itemLabel color="#000000" backgroundColor="#FFFFFF"/>
+						<categoryAxisFormat>
+							<axisFormat>
+								<labelFont/>
+								<tickLabelFont/>
+							</axisFormat>
+						</categoryAxisFormat>
+						<valueAxisFormat>
+							<axisFormat tickLabelMask="#.## %">
+								<labelFont/>
+								<tickLabelFont/>
+							</axisFormat>
+						</valueAxisFormat>
+					</barPlot>
+				</barChart>
+				<barChart>
+					<chart customizerClass="org.bonitasoft.simulation.reporting.jasperreport.BarChartVisibleBarLabel">
+						<reportElement x="0" y="1494" width="625" height="205"/>
+						<chartTitle position="Top">
+							<font size="14"/>
+							<titleExpression><![CDATA[$F{RESOURCE_TIME_NAME} + " Utilization By Instance"]]></titleExpression>
+						</chartTitle>
+						<chartSubtitle>
+							<subtitleExpression><![CDATA["represents the key figures of the resource utilization for a process instance reagrding all the executed instances"]]></subtitleExpression>
+						</chartSubtitle>
+						<chartLegend/>
+					</chart>
+					<categoryDataset>
+						<dataset resetType="Group" resetGroup="RESOURCE_TIME_NAME" incrementType="Page"/>
+						<categorySeries>
+							<seriesExpression><![CDATA["Minimum"]]></seriesExpression>
+							<categoryExpression><![CDATA[""]]></categoryExpression>
+							<valueExpression><![CDATA[$F{RESOURCE_MIN_USE}]]></valueExpression>
+						</categorySeries>
+						<categorySeries>
+							<seriesExpression><![CDATA["Average"]]></seriesExpression>
+							<categoryExpression><![CDATA[""]]></categoryExpression>
+							<valueExpression><![CDATA[$F{RESOURCE_AVG_USE}]]></valueExpression>
+						</categorySeries>
+						<categorySeries>
+							<seriesExpression><![CDATA["Maximum"]]></seriesExpression>
+							<categoryExpression><![CDATA[""]]></categoryExpression>
+							<valueExpression><![CDATA[$F{RESOURCE_MAX_USE}]]></valueExpression>
+						</categorySeries>
+					</categoryDataset>
+					<barPlot>
+						<plot>
+							<seriesColor seriesOrder="0" color="#009999"/>
+							<seriesColor seriesOrder="1" color="#0000FF"/>
+							<seriesColor seriesOrder="2" color="#CC0000"/>
+							<seriesColor seriesOrder="3" color="#33CC00"/>
+							<seriesColor seriesOrder="4" color="#CC6600"/>
+						</plot>
+						<itemLabel color="#000000" backgroundColor="#FFFFFF"/>
+						<categoryAxisFormat>
+							<axisFormat>
+								<labelFont/>
+								<tickLabelFont/>
+							</axisFormat>
+						</categoryAxisFormat>
+						<valueAxisFormat>
+							<axisFormat tickLabelMask="#.## %">
+								<labelFont/>
+								<tickLabelFont/>
+							</axisFormat>
+						</valueAxisFormat>
+					</barPlot>
+				</barChart>
+			</band>
+		</groupFooter>
+	</group>
+	<group name="RESOURCE_TIME_TIME">
+		<groupExpression><![CDATA[$F{RESOURCE_TIME_TIME}]]></groupExpression>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<summary>
+		<band height="160">
+			<subreport>
+				<reportElement x="0" y="11" width="960" height="55"/>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "NumericDataReport.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement x="0" y="89" width="960" height="64"/>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "LiteralDataReport.jasper"]]></subreportExpression>
+			</subreport>
+			<break>
+				<reportElement x="0" y="77" width="100" height="1"/>
+			</break>
+		</band>
+	</summary>
+</jasperReport>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="NumericDataReport" language="groovy" pageWidth="1000" pageHeight="1000" columnWidth="960" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT
+     NUMBER_DATA."MIN_VALUE" AS NUMBER_DATA_MIN_VALUE,
+     NUMBER_DATA."NAME" AS NUMBER_DATA_NAME,
+     NUMBER_DATA."AVG_VALUE" AS NUMBER_DATA_AVG_VALUE,
+     NUMBER_DATA."MAX_VALUE" AS NUMBER_DATA_MAX_VALUE
+FROM
+     "APP"."NUMBER_DATA" NUMBER_DATA]]>
+	</queryString>
+	<field name="NUMBER_DATA_MIN_VALUE" class="java.lang.Double"/>
+	<field name="NUMBER_DATA_NAME" class="java.lang.String"/>
+	<field name="NUMBER_DATA_AVG_VALUE" class="java.lang.Double"/>
+	<field name="NUMBER_DATA_MAX_VALUE" class="java.lang.Double"/>
+	<group name="NUMBER_DATA_NAME">
+		<groupExpression><![CDATA[$F{NUMBER_DATA_NAME}]]></groupExpression>
+		<groupFooter>
+			<band height="293">
+				<barChart>
+					<chart customizerClass="org.bonitasoft.simulation.reporting.jasperreport.BarChartVisibleBarLabel">
+						<reportElement x="0" y="37" width="960" height="226"/>
+						<chartTitle position="Top">
+							<font size="14"/>
+							<titleExpression><![CDATA[$F{NUMBER_DATA_NAME}+" Data Values"]]></titleExpression>
+						</chartTitle>
+						<chartSubtitle>
+							<subtitleExpression><![CDATA["represents the key figures of the data value at the end of each instances"]]></subtitleExpression>
+						</chartSubtitle>
+						<chartLegend/>
+					</chart>
+					<categoryDataset>
+						<dataset resetType="Group" resetGroup="NUMBER_DATA_NAME"/>
+						<categorySeries>
+							<seriesExpression><![CDATA["Minimum"]]></seriesExpression>
+							<categoryExpression><![CDATA[""]]></categoryExpression>
+							<valueExpression><![CDATA[$F{NUMBER_DATA_MIN_VALUE}]]></valueExpression>
+						</categorySeries>
+						<categorySeries>
+							<seriesExpression><![CDATA["Average"]]></seriesExpression>
+							<categoryExpression><![CDATA[""]]></categoryExpression>
+							<valueExpression><![CDATA[$F{NUMBER_DATA_AVG_VALUE}]]></valueExpression>
+						</categorySeries>
+						<categorySeries>
+							<seriesExpression><![CDATA["Maximum"]]></seriesExpression>
+							<categoryExpression><![CDATA[""]]></categoryExpression>
+							<valueExpression><![CDATA[$F{NUMBER_DATA_MAX_VALUE}]]></valueExpression>
+						</categorySeries>
+					</categoryDataset>
+					<barPlot>
+						<plot>
+							<seriesColor seriesOrder="0" color="#009999"/>
+							<seriesColor seriesOrder="1" color="#0000FF"/>
+							<seriesColor seriesOrder="2" color="#CC0000"/>
+							<seriesColor seriesOrder="3" color="#33CC00"/>
+							<seriesColor seriesOrder="4" color="#CC6600"/>
+						</plot>
+						<itemLabel color="#000000" backgroundColor="#FFFFFF"/>
+						<categoryAxisFormat>
+							<axisFormat>
+								<labelFont/>
+								<tickLabelFont/>
+							</axisFormat>
+						</categoryAxisFormat>
+						<valueAxisFormat>
+							<axisFormat tickLabelMask="#,##">
+								<labelFont/>
+								<tickLabelFont/>
+							</axisFormat>
+						</valueAxisFormat>
+					</barPlot>
+				</barChart>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+</jasperReport>

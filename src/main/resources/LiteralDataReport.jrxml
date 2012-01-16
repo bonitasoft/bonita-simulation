@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="LiteralDataReport" language="groovy" pageWidth="1000" pageHeight="1000" columnWidth="960" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT
+     LITERAL_DATA."NAME" AS LITERAL_DATA_NAME,
+     LITERAL_DATA."LITERAL" AS LITERAL_DATA_LITERAL,
+     LITERAL_DATA."REPARTITION" AS LITERAL_DATA_REPARTITION
+FROM
+     "APP"."LITERAL_DATA" LITERAL_DATA]]>
+	</queryString>
+	<field name="LITERAL_DATA_NAME" class="java.lang.String"/>
+	<field name="LITERAL_DATA_LITERAL" class="java.lang.String"/>
+	<field name="LITERAL_DATA_REPARTITION" class="java.lang.Double"/>
+	<group name="LITERAL_DATA_NAME">
+		<groupExpression><![CDATA[$F{LITERAL_DATA_NAME}]]></groupExpression>
+		<groupFooter>
+			<band height="288">
+				<barChart>
+					<chart customizerClass="org.bonitasoft.simulation.reporting.jasperreport.BarChartVisibleBarLabel">
+						<reportElement x="0" y="38" width="960" height="227"/>
+						<chartTitle>
+							<font size="14"/>
+							<titleExpression><![CDATA[$F{LITERAL_DATA_NAME} +" Data Literals Repartition"]]></titleExpression>
+						</chartTitle>
+						<chartSubtitle>
+							<subtitleExpression><![CDATA["represents the repartition  of the literals of the data at the end of each instances"]]></subtitleExpression>
+						</chartSubtitle>
+						<chartLegend/>
+					</chart>
+					<categoryDataset>
+						<dataset resetType="Group" resetGroup="LITERAL_DATA_NAME"/>
+						<categorySeries>
+							<seriesExpression><![CDATA["Repartition"]]></seriesExpression>
+							<categoryExpression><![CDATA[$F{LITERAL_DATA_LITERAL}]]></categoryExpression>
+							<valueExpression><![CDATA[$F{LITERAL_DATA_REPARTITION}]]></valueExpression>
+						</categorySeries>
+					</categoryDataset>
+					<barPlot>
+						<plot>
+							<seriesColor seriesOrder="0" color="#009999"/>
+							<seriesColor seriesOrder="1" color="#0000FF"/>
+							<seriesColor seriesOrder="2" color="#CC0000"/>
+							<seriesColor seriesOrder="3" color="#33CC00"/>
+							<seriesColor seriesOrder="4" color="#CC6600"/>
+						</plot>
+						<itemLabel color="#000000" backgroundColor="#FFFFFF"/>
+						<categoryAxisFormat>
+							<axisFormat>
+								<labelFont/>
+								<tickLabelFont/>
+							</axisFormat>
+						</categoryAxisFormat>
+						<valueAxisLabelExpression><![CDATA["Repartition"]]></valueAxisLabelExpression>
+						<valueAxisFormat>
+							<axisFormat tickLabelMask="#.## %">
+								<labelFont/>
+								<tickLabelFont/>
+							</axisFormat>
+						</valueAxisFormat>
+					</barPlot>
+				</barChart>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+</jasperReport>

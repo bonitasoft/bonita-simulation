@@ -1,0 +1,451 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Process Report" pageWidth="1000" pageHeight="2000" columnWidth="960" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="588"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="Table Dataset 1"/>
+	<parameter name="PROCESS_NAME" class="java.lang.String"/>
+	<parameter name="REPORT_CREATION_DATE" class="java.lang.String"/>
+	<parameter name="SIMULATION_START_DATE" class="java.lang.String"/>
+	<parameter name="SIMULATION_END_DATE" class="java.lang.String"/>
+	<parameter name="SIMULATION_DURATION" class="java.lang.String"/>
+	<parameter name="EXECUTION_TIME" class="java.lang.String"/>
+	<parameter name="NB_INSTANCES" class="java.lang.String"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="PDF_LINK" class="java.lang.String"/>
+	<parameter name="SHOW_LINK" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT
+     PROCESS."NAME" AS PROCESS_NAME,
+     PROCESS."MIN_EXEC_TIME" AS PROCESS_MIN_EXEC_TIME,
+     PROCESS."AVG_EXEC_TIME" AS PROCESS_AVG_EXEC_TIME,
+     PROCESS."MAX_EXEC_TIME" AS PROCESS_MAX_EXEC_TIME,
+     PROCESS."MIN_WAIT_TIME" AS PROCESS_MIN_WAIT_TIME,
+     PROCESS."AVG_WAIT_TIME" AS PROCESS_AVG_WAIT_TIME,
+     PROCESS."MAX_WAIT_TIME" AS PROCESS_MAX_WAIT_TIME,
+     PROCESS."TOTAL_EXEC_TIME" AS PROCESS_TOTAL_EXEC_TIME,
+     PROCESS."TOTAL_WAIT_TIME" AS PROCESS_TOTAL_WAIT_TIME,
+     PROCESS_TIME."TIME" AS PROCESS_TIME_TIME,
+     PROCESS_TIME."MIN_EXEC_TIME" AS PROCESS_TIME_MIN_EXEC_TIME,
+     PROCESS_TIME."AVG_EXEC_TIME" AS PROCESS_TIME_AVG_EXEC_TIME,
+     PROCESS_TIME."MAX_EXEC_TIME" AS PROCESS_TIME_MAX_EXEC_TIME,
+     PROCESS_TIME."MIN_WAIT_TIME" AS PROCESS_TIME_MIN_WAIT_TIME,
+     PROCESS_TIME."AVG_WAIT_TIME" AS PROCESS_TIME_AVG_WAIT_TIME,
+     PROCESS_TIME."MAX_WAIT_TIME" AS PROCESS_TIME_MAX_WAIT_TIME,
+     PROCESS_TIME."MAX_TIME" AS PROCESS_TIME_MAX_TIME,
+     LOADPROFILE."START_PERIOD" AS LOADPROFILE_START_PERIOD,
+     LOADPROFILE."END_PERIOD" AS LOADPROFILE_END_PERIOD,
+     LOADPROFILE."NB_INSTANCES" AS LOADPROFILE_NB_INSTANCES
+FROM
+     "APP"."PROCESS" PROCESS,
+     "APP"."PROCESS_TIME" PROCESS_TIME,
+     "APP"."LOADPROFILE" LOADPROFILE]]>
+	</queryString>
+	<field name="PROCESS_NAME" class="java.lang.String"/>
+	<field name="PROCESS_MIN_EXEC_TIME" class="java.lang.Double"/>
+	<field name="PROCESS_AVG_EXEC_TIME" class="java.lang.Double"/>
+	<field name="PROCESS_MAX_EXEC_TIME" class="java.lang.Double"/>
+	<field name="PROCESS_MIN_WAIT_TIME" class="java.lang.Double"/>
+	<field name="PROCESS_AVG_WAIT_TIME" class="java.lang.Double"/>
+	<field name="PROCESS_MAX_WAIT_TIME" class="java.lang.Double"/>
+	<field name="PROCESS_TOTAL_EXEC_TIME" class="java.lang.Double"/>
+	<field name="PROCESS_TOTAL_WAIT_TIME" class="java.lang.Double"/>
+	<field name="PROCESS_TIME_TIME" class="java.sql.Timestamp"/>
+	<field name="PROCESS_TIME_MIN_EXEC_TIME" class="java.lang.Double"/>
+	<field name="PROCESS_TIME_AVG_EXEC_TIME" class="java.lang.Double"/>
+	<field name="PROCESS_TIME_MAX_EXEC_TIME" class="java.lang.Double"/>
+	<field name="PROCESS_TIME_MIN_WAIT_TIME" class="java.lang.Double"/>
+	<field name="PROCESS_TIME_AVG_WAIT_TIME" class="java.lang.Double"/>
+	<field name="PROCESS_TIME_MAX_WAIT_TIME" class="java.lang.Double"/>
+	<field name="PROCESS_TIME_MAX_TIME" class="java.lang.Double"/>
+	<field name="LOADPROFILE_START_PERIOD" class="java.sql.Timestamp"/>
+	<field name="LOADPROFILE_END_PERIOD" class="java.sql.Timestamp"/>
+	<field name="LOADPROFILE_NB_INSTANCES" class="java.lang.Integer"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="37" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="960" height="37"/>
+				<textElement textAlignment="Center">
+					<font size="24"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{PROCESS_NAME} + " Simulation Report"]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="146" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="46" width="960" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{SIMULATION_START_DATE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="66" width="960" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{SIMULATION_END_DATE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="86" width="960" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{SIMULATION_DURATION}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="106" width="960" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{EXECUTION_TIME}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="126" width="960" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{NB_INSTANCES}]]></textFieldExpression>
+			</textField>
+			<textField hyperlinkType="Reference" hyperlinkTarget="Blank">
+				<reportElement x="0" y="0" width="960" height="32" forecolor="#0066CC"/>
+				<textElement textAlignment="Right">
+					<font size="16" isUnderline="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{SHOW_LINK}]]></textFieldExpression>
+				<hyperlinkReferenceExpression><![CDATA[$P{PDF_LINK}]]></hyperlinkReferenceExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<summary>
+		<band height="1762" splitType="Stretch">
+			<timeSeriesChart>
+				<chart>
+					<reportElement x="0" y="302" width="960" height="237"/>
+					<chartTitle>
+						<font size="14"/>
+						<titleExpression><![CDATA[$P{PROCESS_NAME}  + " Instances Execution Time"]]></titleExpression>
+					</chartTitle>
+					<chartSubtitle>
+						<subtitleExpression><![CDATA["represents the execution times of simulated process instances through the total simulation timespan"]]></subtitleExpression>
+					</chartSubtitle>
+					<chartLegend/>
+				</chart>
+				<timeSeriesDataset timePeriod="Hour">
+					<timeSeries>
+						<seriesExpression><![CDATA["Minimum"]]></seriesExpression>
+						<timePeriodExpression><![CDATA[$F{PROCESS_TIME_TIME}]]></timePeriodExpression>
+						<valueExpression><![CDATA[$F{PROCESS_TIME_MIN_EXEC_TIME}]]></valueExpression>
+					</timeSeries>
+					<timeSeries>
+						<seriesExpression><![CDATA["Average"]]></seriesExpression>
+						<timePeriodExpression><![CDATA[$F{PROCESS_TIME_TIME}]]></timePeriodExpression>
+						<valueExpression><![CDATA[$F{PROCESS_TIME_AVG_EXEC_TIME}]]></valueExpression>
+					</timeSeries>
+					<timeSeries>
+						<seriesExpression><![CDATA["Maximum"]]></seriesExpression>
+						<timePeriodExpression><![CDATA[$F{PROCESS_TIME_TIME}]]></timePeriodExpression>
+						<valueExpression><![CDATA[$F{PROCESS_TIME_MAX_EXEC_TIME}]]></valueExpression>
+					</timeSeries>
+					<timeSeries>
+						<seriesExpression><![CDATA["Maximum Threshold"]]></seriesExpression>
+						<timePeriodExpression><![CDATA[$F{PROCESS_TIME_TIME}]]></timePeriodExpression>
+						<valueExpression><![CDATA[$F{PROCESS_TIME_MAX_TIME}]]></valueExpression>
+					</timeSeries>
+				</timeSeriesDataset>
+				<timeSeriesPlot isShowShapes="false">
+					<plot>
+						<seriesColor seriesOrder="0" color="#009999"/>
+						<seriesColor seriesOrder="1" color="#0000FF"/>
+						<seriesColor seriesOrder="2" color="#CC0000"/>
+						<seriesColor seriesOrder="3" color="#33CC00"/>
+						<seriesColor seriesOrder="4" color="#CC6600"/>
+					</plot>
+					<timeAxisFormat>
+						<axisFormat>
+							<labelFont/>
+							<tickLabelFont/>
+						</axisFormat>
+					</timeAxisFormat>
+					<valueAxisLabelExpression><![CDATA["Execution Time in Hours"]]></valueAxisLabelExpression>
+					<valueAxisFormat>
+						<axisFormat tickLabelMask="##.#">
+							<labelFont/>
+							<tickLabelFont/>
+						</axisFormat>
+					</valueAxisFormat>
+				</timeSeriesPlot>
+			</timeSeriesChart>
+			<timeSeriesChart>
+				<chart>
+					<reportElement x="0" y="888" width="960" height="241"/>
+					<chartTitle>
+						<font size="14"/>
+						<titleExpression><![CDATA[$P{PROCESS_NAME}  + " Instances Waiting Time"]]></titleExpression>
+					</chartTitle>
+					<chartSubtitle>
+						<subtitleExpression><![CDATA["represents the execution times of simulated process instances through the total simulation timespan"]]></subtitleExpression>
+					</chartSubtitle>
+					<chartLegend/>
+				</chart>
+				<timeSeriesDataset timePeriod="Hour">
+					<timeSeries>
+						<seriesExpression><![CDATA["Minimum"]]></seriesExpression>
+						<timePeriodExpression><![CDATA[$F{PROCESS_TIME_TIME}]]></timePeriodExpression>
+						<valueExpression><![CDATA[$F{PROCESS_TIME_MIN_WAIT_TIME}]]></valueExpression>
+					</timeSeries>
+					<timeSeries>
+						<seriesExpression><![CDATA["Average"]]></seriesExpression>
+						<timePeriodExpression><![CDATA[$F{PROCESS_TIME_TIME}]]></timePeriodExpression>
+						<valueExpression><![CDATA[$F{PROCESS_TIME_AVG_WAIT_TIME}]]></valueExpression>
+					</timeSeries>
+					<timeSeries>
+						<seriesExpression><![CDATA["Maximum"]]></seriesExpression>
+						<timePeriodExpression><![CDATA[$F{PROCESS_TIME_TIME}]]></timePeriodExpression>
+						<valueExpression><![CDATA[$F{PROCESS_TIME_MAX_WAIT_TIME}]]></valueExpression>
+					</timeSeries>
+				</timeSeriesDataset>
+				<timeSeriesPlot isShowShapes="false">
+					<plot>
+						<seriesColor seriesOrder="0" color="#009999"/>
+						<seriesColor seriesOrder="1" color="#0000FF"/>
+						<seriesColor seriesOrder="2" color="#CC0000"/>
+						<seriesColor seriesOrder="3" color="#33CC00"/>
+						<seriesColor seriesOrder="4" color="#CC6600"/>
+					</plot>
+					<timeAxisFormat>
+						<axisFormat>
+							<labelFont/>
+							<tickLabelFont/>
+						</axisFormat>
+					</timeAxisFormat>
+					<valueAxisLabelExpression><![CDATA["Waiting Time in Hours"]]></valueAxisLabelExpression>
+					<valueAxisFormat>
+						<axisFormat tickLabelMask="##.#">
+							<labelFont/>
+							<tickLabelFont/>
+						</axisFormat>
+					</valueAxisFormat>
+				</timeSeriesPlot>
+			</timeSeriesChart>
+			<barChart>
+				<chart customizerClass="org.bonitasoft.simulation.reporting.jasperreport.BarChartVisibleBarLabel">
+					<reportElement x="0" y="0" width="960" height="237"/>
+					<chartTitle>
+						<font size="14"/>
+						<titleExpression><![CDATA["Load Profile"]]></titleExpression>
+					</chartTitle>
+					<chartSubtitle>
+						<subtitleExpression><![CDATA["represents the injection load profile used for this simulation"]]></subtitleExpression>
+					</chartSubtitle>
+					<chartLegend/>
+				</chart>
+				<categoryDataset>
+					<categorySeries>
+						<seriesExpression><![CDATA["Number of Instances"]]></seriesExpression>
+						<categoryExpression><![CDATA[$F{LOADPROFILE_START_PERIOD}+"-"+$F{LOADPROFILE_END_PERIOD}]]></categoryExpression>
+						<valueExpression><![CDATA[$F{LOADPROFILE_NB_INSTANCES}]]></valueExpression>
+					</categorySeries>
+				</categoryDataset>
+				<barPlot>
+					<plot>
+						<seriesColor seriesOrder="0" color="#0066CC"/>
+					</plot>
+					<itemLabel color="#000000" backgroundColor="#FFFFFF"/>
+					<categoryAxisFormat>
+						<axisFormat>
+							<labelFont/>
+							<tickLabelFont/>
+						</axisFormat>
+					</categoryAxisFormat>
+					<valueAxisFormat>
+						<axisFormat>
+							<labelFont/>
+							<tickLabelFont/>
+						</axisFormat>
+					</valueAxisFormat>
+				</barPlot>
+			</barChart>
+			<barChart>
+				<chart customizerClass="org.bonitasoft.simulation.reporting.jasperreport.BarChartVisibleBarLabel">
+					<reportElement x="0" y="568" width="960" height="206"/>
+					<chartTitle>
+						<font size="14"/>
+						<titleExpression><![CDATA[$P{PROCESS_NAME}  + " Execution Times By Instance"]]></titleExpression>
+					</chartTitle>
+					<chartSubtitle>
+						<subtitleExpression><![CDATA["represents the key execution times of a process instance regarding all the executed instances"]]></subtitleExpression>
+					</chartSubtitle>
+					<chartLegend/>
+				</chart>
+				<categoryDataset>
+					<categorySeries>
+						<seriesExpression><![CDATA["Minimum"]]></seriesExpression>
+						<categoryExpression><![CDATA[""]]></categoryExpression>
+						<valueExpression><![CDATA[$F{PROCESS_MIN_EXEC_TIME}]]></valueExpression>
+					</categorySeries>
+					<categorySeries>
+						<seriesExpression><![CDATA["Average"]]></seriesExpression>
+						<categoryExpression><![CDATA[""]]></categoryExpression>
+						<valueExpression><![CDATA[$F{PROCESS_AVG_EXEC_TIME}]]></valueExpression>
+					</categorySeries>
+					<categorySeries>
+						<seriesExpression><![CDATA["Maximum"]]></seriesExpression>
+						<categoryExpression><![CDATA[""]]></categoryExpression>
+						<valueExpression><![CDATA[$F{PROCESS_MAX_EXEC_TIME}]]></valueExpression>
+					</categorySeries>
+				</categoryDataset>
+				<barPlot>
+					<plot>
+						<seriesColor seriesOrder="0" color="#009999"/>
+						<seriesColor seriesOrder="1" color="#0000FF"/>
+						<seriesColor seriesOrder="2" color="#CC0000"/>
+						<seriesColor seriesOrder="3" color="#33CC00"/>
+						<seriesColor seriesOrder="4" color="#CC6600"/>
+					</plot>
+					<itemLabel color="#000000" backgroundColor="#FFFFFF"/>
+					<categoryAxisLabelExpression><![CDATA[]]></categoryAxisLabelExpression>
+					<categoryAxisFormat>
+						<axisFormat>
+							<labelFont/>
+							<tickLabelFont/>
+						</axisFormat>
+					</categoryAxisFormat>
+					<valueAxisLabelExpression><![CDATA["Execution Time in Hours"]]></valueAxisLabelExpression>
+					<valueAxisFormat>
+						<axisFormat tickLabelMask="##.#">
+							<labelFont/>
+							<tickLabelFont/>
+						</axisFormat>
+					</valueAxisFormat>
+				</barPlot>
+			</barChart>
+			<barChart>
+				<chart customizerClass="org.bonitasoft.simulation.reporting.jasperreport.BarChartVisibleBarLabel">
+					<reportElement x="0" y="1160" width="960" height="206"/>
+					<chartTitle>
+						<font size="14"/>
+						<titleExpression><![CDATA[$P{PROCESS_NAME}  + " Waiting Times By Instance"]]></titleExpression>
+					</chartTitle>
+					<chartSubtitle>
+						<subtitleExpression><![CDATA["represents the key waiting times of a process instance regarding all the executed instances"]]></subtitleExpression>
+					</chartSubtitle>
+					<chartLegend/>
+				</chart>
+				<categoryDataset>
+					<categorySeries>
+						<seriesExpression><![CDATA["Minimum"]]></seriesExpression>
+						<categoryExpression><![CDATA[""]]></categoryExpression>
+						<valueExpression><![CDATA[$F{PROCESS_MIN_WAIT_TIME}]]></valueExpression>
+					</categorySeries>
+					<categorySeries>
+						<seriesExpression><![CDATA["Average"]]></seriesExpression>
+						<categoryExpression><![CDATA[""]]></categoryExpression>
+						<valueExpression><![CDATA[$F{PROCESS_AVG_WAIT_TIME}]]></valueExpression>
+					</categorySeries>
+					<categorySeries>
+						<seriesExpression><![CDATA["Maximum"]]></seriesExpression>
+						<categoryExpression><![CDATA[""]]></categoryExpression>
+						<valueExpression><![CDATA[$F{PROCESS_MAX_WAIT_TIME}]]></valueExpression>
+					</categorySeries>
+				</categoryDataset>
+				<barPlot>
+					<plot>
+						<seriesColor seriesOrder="0" color="#009999"/>
+						<seriesColor seriesOrder="1" color="#0000FF"/>
+						<seriesColor seriesOrder="2" color="#CC0000"/>
+						<seriesColor seriesOrder="3" color="#33CC00"/>
+						<seriesColor seriesOrder="4" color="#CC6600"/>
+					</plot>
+					<itemLabel color="#000000" backgroundColor="#FFFFFF"/>
+					<categoryAxisFormat>
+						<axisFormat>
+							<labelFont/>
+							<tickLabelFont/>
+						</axisFormat>
+					</categoryAxisFormat>
+					<valueAxisLabelExpression><![CDATA["Waiting Time in Hours"]]></valueAxisLabelExpression>
+					<valueAxisFormat>
+						<axisFormat tickLabelMask="##.#">
+							<labelFont/>
+							<tickLabelFont/>
+						</axisFormat>
+					</valueAxisFormat>
+				</barPlot>
+			</barChart>
+			<barChart>
+				<chart customizerClass="org.bonitasoft.simulation.reporting.jasperreport.BarChartVisibleBarLabel">
+					<reportElement x="0" y="1457" width="960" height="205"/>
+					<chartTitle>
+						<font size="14"/>
+						<titleExpression><![CDATA[$P{PROCESS_NAME}  +" Instances Cumulated Time"]]></titleExpression>
+					</chartTitle>
+					<chartSubtitle>
+						<subtitleExpression><![CDATA["represents the cumulated execution time and waiting time over the simulation"]]></subtitleExpression>
+					</chartSubtitle>
+					<chartLegend/>
+				</chart>
+				<categoryDataset>
+					<categorySeries>
+						<seriesExpression><![CDATA["Execution Time"]]></seriesExpression>
+						<categoryExpression><![CDATA[""]]></categoryExpression>
+						<valueExpression><![CDATA[$F{PROCESS_TOTAL_EXEC_TIME}]]></valueExpression>
+					</categorySeries>
+					<categorySeries>
+						<seriesExpression><![CDATA["Waiting Time"]]></seriesExpression>
+						<categoryExpression><![CDATA[""]]></categoryExpression>
+						<valueExpression><![CDATA[$F{PROCESS_TOTAL_WAIT_TIME}]]></valueExpression>
+					</categorySeries>
+				</categoryDataset>
+				<barPlot>
+					<plot>
+						<seriesColor seriesOrder="0" color="#009999"/>
+						<seriesColor seriesOrder="1" color="#CC0000"/>
+					</plot>
+					<itemLabel color="#000000" backgroundColor="#FFFFFF"/>
+					<categoryAxisFormat>
+						<axisFormat>
+							<labelFont/>
+							<tickLabelFont/>
+						</axisFormat>
+					</categoryAxisFormat>
+					<valueAxisLabelExpression><![CDATA["Time in Hours"]]></valueAxisLabelExpression>
+					<valueAxisFormat>
+						<axisFormat tickLabelMask="##.#">
+							<labelFont/>
+							<tickLabelFont/>
+						</axisFormat>
+					</valueAxisFormat>
+				</barPlot>
+			</barChart>
+			<break>
+				<reportElement x="0" y="1675" width="960" height="1"/>
+			</break>
+			<subreport>
+				<reportElement x="-20" y="1696" width="999" height="66"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "ActivityReport.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</summary>
+</jasperReport>
