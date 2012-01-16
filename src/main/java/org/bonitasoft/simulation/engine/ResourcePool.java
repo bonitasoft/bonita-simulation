@@ -66,7 +66,6 @@ public class ResourcePool {
 			}
 			resourceInstances.put(resource.getName(), new RuntimeResource(resource,instances,startTime,timespan));		
 		}else{//UNLIMITED RESOURCE MODE
-			final SimCalendarInstance planning = new SimCalendarInstance(startTime,process,resource.getName(),resource.getPlanning().getDaysOfWeek()) ;
 			resourceInstances.put(resource.getName(), new DynamicRuntimeResource(resource,process,resource.getPlanning().getDaysOfWeek(),startTime,timespan));	
 		}
 		

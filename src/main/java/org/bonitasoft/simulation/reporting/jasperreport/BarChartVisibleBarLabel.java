@@ -47,15 +47,6 @@ public class BarChartVisibleBarLabel implements JRChartCustomizer {
 		// If there isn't enough space to draw the ItemLabel...
 		bsr.setPositiveItemLabelPositionFallback(new ItemLabelPosition(ItemLabelAnchor.OUTSIDE12, TextAnchor.CENTER));
 		bsr.setNegativeItemLabelPositionFallback(new ItemLabelPosition(ItemLabelAnchor.OUTSIDE12, TextAnchor.CENTER));
-		
-		
-		
-//		bsr.setBaseItemLabelGenerator(new StandardCategoryItemLabelGenerator());
-//		Font itemLabelFont = bsr.getBaseItemLabelFont();
-//		bsr.setBaseItemLabelFont(itemLabelFont.deriveFont(new Float(8.0)));
-//		bsr.setBaseItemLabelsVisible(true);
-//		bsr.setItemLabelsVisible(true);
-
 	}
 
 }

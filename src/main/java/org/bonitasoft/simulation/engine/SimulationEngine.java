@@ -26,6 +26,12 @@ import java.util.PriorityQueue;
 import java.util.Properties;
 import java.util.Set;
 
+import org.bonitasoft.simulation.iteration.IterationDescriptor;
+import org.bonitasoft.simulation.iteration.IterationDetection;
+import org.bonitasoft.simulation.iteration.IterationNode;
+import org.bonitasoft.simulation.iteration.IterationNode.SplitType;
+import org.bonitasoft.simulation.iteration.IterationProcess;
+import org.bonitasoft.simulation.iteration.IterationTransition;
 import org.bonitasoft.simulation.model.Period;
 import org.bonitasoft.simulation.model.RepartitionType;
 import org.bonitasoft.simulation.model.calendar.SimCalendar;
@@ -43,11 +49,7 @@ import org.bonitasoft.simulation.reporting.CSVSimReportStorage;
 import org.bonitasoft.simulation.reporting.ISimulationStore;
 import org.bonitasoft.simulation.reporting.SimReport;
 import org.bonitasoft.simulation.reporting.SimReportFactory;
-import org.ow2.bonita.facade.def.element.impl.IterationDescriptor;
-import org.ow2.bonita.iteration.IterationDetection;
-import org.ow2.bonita.iteration.IterationNode;
-import org.ow2.bonita.iteration.IterationProcess;
-import org.ow2.bonita.iteration.IterationTransition;
+
 
 /**
  * @author Romain Bioteau
@@ -249,8 +251,8 @@ public class SimulationEngine {
 			final String joinType = activityDefinition.getJoinType().toString();
 
 			final IterationNode node = new IterationNode(activityDefinition.getName(), 
-					org.ow2.bonita.iteration.IterationNode.JoinType.valueOf(joinType), 
-					org.ow2.bonita.iteration.IterationNode.SplitType.XOR);
+					org.bonitasoft.simulation.iteration.IterationNode.JoinType.valueOf(joinType), 
+					SplitType.XOR);
 			iterationProcess.addNode(node);
 		}
 

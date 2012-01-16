@@ -22,7 +22,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.ow2.bonita.facade.def.element.impl.IterationDescriptor;
+import org.bonitasoft.simulation.iteration.IterationDescriptor;
 
 
 /**
@@ -35,7 +35,6 @@ public class SimProcess extends SimNamedElement {
 	private Set<SimData> data ;
 	private Set<IterationDescriptor> cycles ;
 	private long maximumTime ;
-	private double maxCost;
 
 	public SimProcess(String name){
 		super(name);
