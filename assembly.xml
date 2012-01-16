@@ -12,7 +12,6 @@
 		<useTransitiveDependencies>true</useTransitiveDependencies>
 		<useTransitiveFiltering>true</useTransitiveFiltering>
 			<includes>
-				<include>org.ow2.bonita:bonita-client</include>
 				<include>org.codehaus.groovy:groovy-all</include>
 				<include>net.sf.csv4j:csv4j</include>
 				<include>org.apache.derby:derby</include>
