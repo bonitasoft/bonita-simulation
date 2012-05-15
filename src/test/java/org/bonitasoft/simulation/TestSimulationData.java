@@ -47,7 +47,7 @@ public class TestSimulationData extends TestCase {
 		int nbOfTrue = 0 ;
 		int nbOfFalse = 0 ;
 		for(int i =0 ; i<SAMPLE_SIZE ; i++){
-			if(DataUtil.generateBoolean(d) == Boolean.TRUE){
+			if(DataUtil.getInstance().generateBoolean(d) == Boolean.TRUE){
 				nbOfTrue++ ;
 			}else{
 				nbOfFalse++ ;
@@ -61,7 +61,7 @@ public class TestSimulationData extends TestCase {
 		nbOfTrue = 0 ;
 		nbOfFalse = 0 ;
 		for(int i =0 ; i<SAMPLE_SIZE ; i++){
-			if(DataUtil.generateBoolean(d) == Boolean.TRUE){
+			if(DataUtil.getInstance().generateBoolean(d) == Boolean.TRUE){
 				nbOfTrue++ ;
 			}else{
 				nbOfFalse++ ;
@@ -89,7 +89,7 @@ public class TestSimulationData extends TestCase {
 		int nbInR1 = 0;
 		int nbInR2 = 0;
 		for(int i =0 ; i<SAMPLE_SIZE ; i++){
-			Object v = DataUtil.generateNumeric(d) ;
+			Object v = DataUtil.getInstance().generateNumeric(d) ;
 			assertTrue(((Number)v).doubleValue() >= 0 && ((Number)v).doubleValue() < 1501) ;
 			if(((Number)v).doubleValue() <= 1000){
 				nbInR1++ ;
@@ -122,7 +122,7 @@ public class TestSimulationData extends TestCase {
 		int nbInR3 = 0;
 		int nbInR4 = 0;
 		for(int i =0 ; i<SAMPLE_SIZE ; i++){
-			Object v = DataUtil.generateNumeric(d) ;
+			Object v = DataUtil.getInstance().generateNumeric(d) ;
 			assertTrue(((Number)v).doubleValue() >= 0 && ((Number)v).doubleValue() <= 2500) ;
 			if(((Number)v).doubleValue() <= 1000){
 				nbInR1++ ;
@@ -164,7 +164,7 @@ public class TestSimulationData extends TestCase {
 		int nbOfL2 = 0;
 		int nbOfL3 = 0;
 		for(int i =0 ; i<SAMPLE_SIZE ; i++){
-			Object v = DataUtil.generateLiteral(d) ;
+			Object v = DataUtil.getInstance().generateLiteral(d) ;
 			if(v.equals(l1.getLitValue())){
 				nbOfL1++ ;
 			}else if(v.equals(l2.getLitValue())){

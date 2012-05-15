@@ -84,7 +84,7 @@ public class DataUtil {
 		return script.run();
 	}
 
-	public static Object generateDataInstance(final SimData d) {
+	public Object generateDataInstance(final SimData d) {
 		if(d instanceof SimBooleanData){
 			return generateBoolean((SimBooleanData) d);
 		}else if(d instanceof SimNumberData){
@@ -95,7 +95,7 @@ public class DataUtil {
 		return null;
 	}
 
-	public static Object generateLiteral(final SimLiteralsData d) {
+	public Object generateLiteral(final SimLiteralsData d) {
 		final List<List<Integer>> probabilities = new ArrayList<List<Integer>>();
 		for(int i = 0 ; i<d.getLitterals().size() ; i++){
 			final List<Integer> p = new ArrayList<Integer>();
@@ -116,7 +116,7 @@ public class DataUtil {
 		return d.getLitterals().get(probabilities.size()-1).getLitValue() ;//HANDLE CASE 33%,33%,33%
 	}
 
-	private static int computeStart(final List<SimLiteral> litterals, final int i) {
+	private int computeStart(final List<SimLiteral> litterals, final int i) {
 		int size = 0 ;
 		for(int j = i-1 ; j>=0;j-- ){
 			size = (int) (size + litterals.get(j).getProbability()*100) ;
@@ -124,7 +124,7 @@ public class DataUtil {
 		return size;
 	}
 
-	public static Object generateNumeric(final SimNumberData d) {
+	public Object generateNumeric(final SimNumberData d) {
 		final List<List<Integer>> probabilities = new ArrayList<List<Integer>>();
 		for(int i = 0 ; i<d.getRanges().size() ; i++){
 			final List<Integer> p = new ArrayList<Integer>();
@@ -143,7 +143,7 @@ public class DataUtil {
 		return getRangeValue(d.getRanges().get(probabilities.size()-1)) ; //HANDLE CASE 33%,33%,33%
 	}
 
-	private static int computeRangeStart(final List<NumericRange> ranges, final int i) {
+	private int computeRangeStart(final List<NumericRange> ranges, final int i) {
 		int size = 0 ;
 		for(int j = i-1 ; j>=0;j-- ){
 			size = (int) (size + ranges.get(j).getProbability()*100) ;
@@ -151,18 +151,18 @@ public class DataUtil {
 		return size;
 	}
 
-	public static Number getRangeValue(final NumericRange numericRange) {
+	public Number getRangeValue(final NumericRange numericRange) {
 		return nextDouble(numericRange.getMinRange().doubleValue(),numericRange.getMaxRange().doubleValue());
 	}
 
-	private static double nextDouble(double min, double max){
+	private double nextDouble(double min, double max){
 		double result = RANDOM.nextDouble()*(max-min)+min;
 		if (result >= max)
 			result = nextDouble(min, max);
 		return Math.round(result);
 	}
 
-	public static Object generateBoolean(final SimBooleanData d) {
+	public Object generateBoolean(final SimBooleanData d) {
 	
 		final int r = RANDOM.nextInt(100) ;
 		if (r < d.getProbabilityofTrue()*100){
@@ -181,7 +181,7 @@ public class DataUtil {
 
 	}
 
-	private static Binding createProcessVariableBinding(
+	private Binding createProcessVariableBinding(
 			SimProcessInstance processInstance) {
 		Map<String, Object> variables = new HashMap<String, Object>();
 		for(SimDataInstance di : processInstance.getDataInstance()){
@@ -197,7 +197,7 @@ public class DataUtil {
 		}
 	}
 
-	public static SimDataInstance getDataInstance(SimProcessInstance parentProcessInstance, SimData d) {
+	public SimDataInstance getDataInstance(SimProcessInstance parentProcessInstance, SimData d) {
 
 		for(SimDataInstance di : parentProcessInstance.getDataInstance()){
 			if(di.getDefinition().getName().equals(d.getName())){

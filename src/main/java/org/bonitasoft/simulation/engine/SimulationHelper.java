@@ -145,7 +145,7 @@ public class SimulationHelper {
 		if (!data.isEmpty()){
 			for (SimData d : data){
 				DefinitionPool.getInstance().addDataDefinition(simProc.getName(), d);
-				final Object value = DataUtil.generateDataInstance(d);
+				final Object value = DataUtil.getInstance().generateDataInstance(d);
 				final SimDataInstance di = new SimDataInstance(d, uuid, value) ;
 				spi.addDataInstance(di) ;
 			}
