@@ -66,4 +66,9 @@ public class RuntimeTask implements Comparable<RuntimeTask>{
 		}
 		return super.equals(obj);
 	}
+	
+	@Override
+	public int hashCode() {
+		return (int) (startDate + task.hashCode());
+	}
 }
