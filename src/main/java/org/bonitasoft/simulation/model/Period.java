@@ -79,6 +79,11 @@ public class Period implements Comparable<Period> {
 		}
 		return super.equals(obj);
 	}
+	
+	@Override
+	public int hashCode() {
+		return (int) (getBegin() + getEnd());
+	}
 
 	public boolean overlaps(Period p) {
 		if(getBegin() <= p.getBegin() && getEnd() > p.getBegin()){
