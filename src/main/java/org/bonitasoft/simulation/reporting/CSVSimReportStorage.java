@@ -21,6 +21,7 @@ package org.bonitasoft.simulation.reporting;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -445,16 +446,32 @@ public class CSVSimReportStorage implements ISimulationStore {
 
 	}
 
-	public int size() throws Exception {
-
+	public int size() throws FileNotFoundException {
 		FileReader reader = new FileReader(finishedProcessInstancesTmpFile) ;
 		LineNumberReader lnr = new LineNumberReader(reader) ;
 		int result = 0 ;
-		while(lnr.readLine() != null){
-			result++;
-		}
-		reader.close() ;
-		lnr.close();
+		try {
+			while(lnr.readLine() != null){
+				result++;
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if(reader != null){
+					reader.close();
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			try {
+				if(lnr != null){
+					lnr.close();
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}		
 		return result ;
 	}
 
