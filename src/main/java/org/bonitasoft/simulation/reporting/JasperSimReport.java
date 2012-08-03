@@ -119,9 +119,9 @@ public class JasperSimReport extends SimReport {
 		new File(workspace+File.separatorChar+"ResourceReport.jasper").delete();
 		new File(workspace+File.separatorChar+"NumericDataReport.jasper").delete();
 		new File(workspace+File.separatorChar+"LiteralDataReport.jasper").delete();
-
+				
+		connection.close();
 		jdbcStore.close() ;
-
 
 		return htmlfileName;
 	}
