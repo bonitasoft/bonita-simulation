@@ -288,13 +288,19 @@ public class DerbyJDBCStore {
 		f.deleteOnExit() ;
 	}
 	public void close() throws SQLException {
-		if(connection != null && !connection.isClosed())
+		if(connection != null && !connection.isClosed()){
 			connection.commit();
-
+		}
+		
+		Connection shutdownConnection = null;
 		try{
-			DriverManager.getConnection("jdbc:derby:;shutdown=true");
-		}catch (SQLException e) {
-			
+			shutdownConnection = DriverManager.getConnection("jdbc:derby:;shutdown=true");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			if(!shutdownConnection.isClosed()){
+				shutdownConnection.close();
+			}
 		}
 		if(connection != null && !connection.isClosed()){
 			connection.close() ;
