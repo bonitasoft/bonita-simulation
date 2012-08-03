@@ -85,5 +85,10 @@ public class SimProcessInstance extends SimNamedElementInstance implements Compa
 		}
 		return super.equals(obj);
 	}
+	
+	@Override
+	public int hashCode() {
+		return getInstanceUUID().hashCode();
+	}
 
 }
