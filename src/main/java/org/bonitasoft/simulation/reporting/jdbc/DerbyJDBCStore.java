@@ -298,7 +298,7 @@ public class DerbyJDBCStore {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			if(!shutdownConnection.isClosed()){
+			if(shutdownConnection != null && !shutdownConnection.isClosed()){
 				shutdownConnection.close();
 			}
 		}
