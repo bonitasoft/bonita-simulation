@@ -21,5 +21,10 @@ public abstract class SimNamedElement {
 		}
 		return super.equals(obj);
 	}
+	
+	@Override
+	public int hashCode() {
+		return name.hashCode();
+	}
 
 }
