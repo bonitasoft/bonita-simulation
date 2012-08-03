@@ -417,7 +417,8 @@ public class SimulationEngine {
 	 */
 	public List<SimActivityInstance> getNextActivities(SimActivityInstance elem) throws Exception {
 		final List<SimActivityInstance> results = new ArrayList<SimActivityInstance>();
-		final SimTransition[] transitions = (SimTransition[]) ((SimActivity) elem.getDefinition()).getOutgoingTransitions().toArray(new SimTransition[0]) ;
+		final Set<SimTransition> outgoingTransitions = ((SimActivity) elem.getDefinition()).getOutgoingTransitions();
+		final SimTransition[] transitions = (SimTransition[]) outgoingTransitions.toArray(new SimTransition[outgoingTransitions.size()]) ;
 		if(transitions.length != 0 && !(transitions[0].isDataBased())){//Proba-based Transitions
 			if(((SimActivity) elem.getDefinition()).isExclusiveOutgoingTransition()){
 				//EXCLUSIVE TRANSITIONS PROBABILITY
