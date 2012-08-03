@@ -32,16 +32,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import net.sf.jasperreports.engine.JRParameter;
-import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.util.JRLoader;
-import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
 import org.bonitasoft.simulation.engine.RuntimeResource;
 import org.bonitasoft.simulation.model.loadprofile.InjectionPeriod;
@@ -377,10 +372,12 @@ public class JasperSimReport extends SimReport {
 	protected void fillGeneralSheet() {}
 
 	protected File copyReportToWorkspaceForGeneration(String reportName) {
+		InputStream inputStream = null;
+		OutputStream out = null;
 		try {			
 			File f = new File(workspace+File.separatorChar+reportName);
-			InputStream inputStream = getReportAsStream(reportName);
-			OutputStream out=new FileOutputStream(f);
+			inputStream = getReportAsStream(reportName);
+			out = new FileOutputStream(f);
 			byte buf[]=new byte[1024];
 			int len;
 			while((len=inputStream.read(buf))>0)
@@ -389,7 +386,22 @@ public class JasperSimReport extends SimReport {
 			inputStream.close();
 			return f;
 		} catch (IOException e){
-			
+			e.printStackTrace();
+		} finally {
+			if(inputStream != null){
+				try {
+					inputStream.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			if(out != null){
+				try {
+					out.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 		return null;
 	}
