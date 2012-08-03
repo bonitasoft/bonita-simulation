@@ -490,9 +490,6 @@ public class SimulationEngine {
 					SimProcessInstance instance = SimulationHelper.createInstance(getSimulationProcess(),injectionTime);
 					for(SimActivity startActivity : ((SimProcess) instance.getDefinition()).getStartElements()){
 						SimActivityInstance activityInstance = SimulationHelper.getActivityInstance(instance, startActivity,0) ;
-						if(activityInstance == null){
-							System.out.println(activityInstance);
-						}
 						instance.addStartElement(activityInstance);
 					}
 					store.storeProcessInstance(instance);
