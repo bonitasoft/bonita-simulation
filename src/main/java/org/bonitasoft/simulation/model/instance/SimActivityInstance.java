@@ -157,6 +157,11 @@ public class SimActivityInstance extends SimNamedElementInstance {
 		}
 		return super.equals(obj);
 	}
+	
+	@Override
+	public int hashCode() {
+		return getInstanceUUID().hashCode();
+	}
 
 	public void addIncoming() {
 		this.incomings++;
