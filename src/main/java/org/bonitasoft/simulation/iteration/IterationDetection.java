@@ -80,7 +80,7 @@ public final class IterationDetection {
 	  path.add(sourceNode);
 		 
 		// SourceNode == targetNode --> stop recursive search
-		if (sourceNode.getName().equals(targetNode.getName())) {
+		if (sourceNode == null || targetNode == null || sourceNode.getName().equals(targetNode.getName())) {
 			final IterationDescriptor descriptor = buildIterationDescriptor(inProcess, path);
 			iterationDescriptors.add(descriptor) ;
 			path.remove(sourceNode);
