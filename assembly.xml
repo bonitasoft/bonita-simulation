@@ -16,6 +16,7 @@
 				<include>net.sf.csv4j:csv4j</include>
 				<include>org.apache.derby:derby</include>
 				<include>net.sf.jasperreports:jasperreports</include>
+				<include>>commons-logging:commons-logging</include>
 			</includes>
 			<unpack>false</unpack>
 		</dependencySet>
