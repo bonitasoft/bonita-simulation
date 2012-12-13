@@ -75,12 +75,12 @@ public abstract class CopyTool {
       Object[] value = entry.getValue();
       Collection<Object> newValue = null;
       if (value != null) {
-        newValue = new ArrayList<Object>();
+        newValue = new ArrayList<Object>(value.length);
         for (Object o : value) {
           newValue.add(o);
         }
-      }
-      result.put(key, newValue.toArray());
+        result.put(key, newValue.toArray());
+      }     
     }
     return result;
   }

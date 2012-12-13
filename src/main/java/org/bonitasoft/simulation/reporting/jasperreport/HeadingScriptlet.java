@@ -1,6 +1,6 @@
 /**
- * Copyright (C) 2010 BonitaSoft S.A.
- * BonitaSoft, 31 rue Gustave Eiffel - 38000 Grenoble
+ * Copyright (C) 2010-2012 BonitaSoft S.A.
+ * BonitaSoft, 32 rue Gustave Eiffel - 38000 Grenoble
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,7 +32,7 @@ public class HeadingScriptlet extends JRDefaultScriptlet{
 	public Boolean addHeading() throws JRScriptletException{
 	
 		String activityName = (String)this.getFieldValue("ACTIVITY_NAME");
-		Collection headings = (Collection)this.getVariableValue("HeadingsCollection");
+		Collection<HeadingBean> headings = (Collection<HeadingBean>)this.getVariableValue("HeadingsCollection");
 		Integer pageindex = (Integer)this.getVariableValue("PAGE_NUMBER");
 	
 		try{

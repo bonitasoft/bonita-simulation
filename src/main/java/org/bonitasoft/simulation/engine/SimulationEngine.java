@@ -1,6 +1,6 @@
 /**
- * Copyright (C) 2010 BonitaSoft S.A.
- * BonitaSoft, 31 rue Gustave Eiffel - 38000 Grenoble
+ * Copyright (C) 2010-2012 BonitaSoft S.A.
+ * BonitaSoft, 32 rue Gustave Eiffel - 38000 Grenoble
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -136,12 +136,7 @@ public class SimulationEngine {
 		System.err.println("Create TodoList"); //$NON-NLS-1$
 		createTodoList() ;//CREATE INJECTION CALENDAR
 		this.todoList = new PriorityQueue<RuntimeTask>();
-		List<SimProcessInstance> instances = store.getStoredProcessInstances(INSTANCE_BUFFER_SIZE) ;
-		for(SimProcessInstance instance : instances){
-			for(SimActivityInstance startActivity : instance.getStartElemInstances()){
-				todoList.add(new RuntimeTask(startActivity,instance.getStartDate()));
-			}
-		}
+		initTodoList();
 
 		simulationStartDate = this.todoList.peek().getStartDate() ;
 
@@ -158,28 +153,9 @@ public class SimulationEngine {
 			RuntimeTask taskTodo = todoList.poll() ;
 			currentTime = taskTodo.getStartDate() ;
 
-			if(currentTime >= nextInjection){//LOAD TODOLIST FROM STORE
-				instances = store.getStoredProcessInstances(INSTANCE_BUFFER_SIZE) ;
-				if(!instances.isEmpty()){
-					for(SimProcessInstance instance : instances){
-						for(SimActivityInstance startActivity : instance.getStartElemInstances()){
-							todoList.offer(new RuntimeTask(startActivity,instance.getStartDate()));
-						}
-					}
-					nextInjection = instances.get(instances.size()-1).getStartDate();
-				}else{
-					nextInjection = Long.MAX_VALUE ;
-				}
-			}
+			nextInjection = loadTodoListFromStoreAndRetrieveNextInjection(nextInjection);
 
-
-			if(currentTime >= nextInterval){//UPDATE RESOURCE COUNT
-				System.err.println("Process instance finished = " + executedInstance + ", executed in " + (System.currentTimeMillis() - previous)); //$NON-NLS-1$ //$NON-NLS-2$
-				executedInstance = 0 ;
-				previous = System.currentTimeMillis();
-				ResourcePool.getInstance().updateResourceConsumption(nextInterval) ;
-				nextInterval = nextInterval + timespan ;
-			}
+			previous = updateResourceCount(previous);
 
 			if(taskTodo.getTask().getStartDate() == 0){
 				taskTodo.getTask().setStartDate(currentTime);
@@ -187,18 +163,7 @@ public class SimulationEngine {
 
 			SimActivity activity = (SimActivity) taskTodo.getTask().getDefinition() ;
 
-			boolean waiting = false ;
-			if(activity.getJoinType().equals(JoinType.AND)){
-				if(taskTodo.getTask().getIncomings() != activity.getIncomingTransitions().size()){//WAIT FOR THE OTHERS ACTIVTY
-					waiting = true ;
-					taskTodo.setStartDate(Long.MAX_VALUE) ;
-					todoList.offer(taskTodo);
-				}
-			}else if(activity.getJoinType().equals(JoinType.XOR)){
-				if(taskTodo.getTask().getIncomings() > 1){//SKIP THE EXECUTION
-					waiting = true ;
-				}
-			}
+			final boolean waiting = isWaitingForAnotherActivity(taskTodo, activity);
 
 			if(!waiting){
 				if (!activity.hasResources()) {
@@ -211,24 +176,7 @@ public class SimulationEngine {
 						executeActivityInstances(currentTime, taskTodo,null);
 					}
 				} else {
-
-					final Set<ResourceInstanceAvailability> availableResources = ResourcePool.getInstance().getNextAvailableDateForAllResources(taskTodo.getTask().getProcessInstance().getInstanceUUID(),activity.getName(),currentTime, activity.getAssignedResources(), activity.isContigous());
-					final long nextAvailableDate = availableResources.iterator().next().getTime();
-					if ( nextAvailableDate == currentTime || nbOfLoopWhileUnavailable <= taskTodo.getTask().getSkip() ) {
-						if(activity.getJoinType().equals(JoinType.XOR)){
-							taskTodo.getTask().addIncoming(); 
-							if(taskTodo.getTask().getIncomings() == 1){//SKIP THE EXECUTION
-								executeActivityInstances(nextAvailableDate, taskTodo,availableResources);
-							}
-						}else{
-							executeActivityInstances(nextAvailableDate, taskTodo,availableResources);
-						}
-					} else {
-						taskTodo.getTask().skip() ;
-						taskTodo.setStartDate(nextAvailableDate);
-						todoList.offer(taskTodo);
-					}
-
+					executeActivityInstanceIfResourceAvailable(taskTodo, activity);
 				}
 			}
 		}
@@ -236,12 +184,91 @@ public class SimulationEngine {
 		ResourcePool.getInstance().updateResourceConsumption(getSimulationEndDate()) ;
 
 		if(!isStopped){
-			isGeneratingReport = true ;
-			SimReport report = new SimReportFactory(workspace,getLoadProfile(), getStore(),ResourcePool.getInstance().getResourceInstances(), getSimulationStartDate(), getSimulationEndDate(), timespan,executionStart).createSimulationReport() ;
-			reportFile = report.generate() ;
+			generateReport();
 		}
 		currentTime = 0 ;
 		getStore().closeStore();
+	}
+
+	protected long updateResourceCount(long previous) {
+		if(currentTime >= nextInterval){//UPDATE RESOURCE COUNT
+			System.err.println("Process instance finished = " + executedInstance + ", executed in " + (System.currentTimeMillis() - previous)); //$NON-NLS-1$ //$NON-NLS-2$
+			executedInstance = 0 ;
+			previous = System.currentTimeMillis();
+			ResourcePool.getInstance().updateResourceConsumption(nextInterval) ;
+			nextInterval = nextInterval + timespan ;
+		}
+		return previous;
+	}
+
+	protected void executeActivityInstanceIfResourceAvailable(
+			RuntimeTask taskTodo, SimActivity activity) throws Exception {
+		final Set<ResourceInstanceAvailability> availableResources = ResourcePool.getInstance().getNextAvailableDateForAllResources(taskTodo.getTask().getProcessInstance().getInstanceUUID(),activity.getName(),currentTime, activity.getAssignedResources(), activity.isContigous());
+		final long nextAvailableDate = availableResources.iterator().next().getTime();
+		if ( nextAvailableDate == currentTime || nbOfLoopWhileUnavailable <= taskTodo.getTask().getSkip() ) {
+			if(activity.getJoinType().equals(JoinType.XOR)){
+				taskTodo.getTask().addIncoming(); 
+				if(taskTodo.getTask().getIncomings() == 1){//SKIP THE EXECUTION
+					executeActivityInstances(nextAvailableDate, taskTodo,availableResources);
+				}
+			}else{
+				executeActivityInstances(nextAvailableDate, taskTodo,availableResources);
+			}
+		} else {
+			taskTodo.getTask().skip() ;
+			taskTodo.setStartDate(nextAvailableDate);
+			todoList.offer(taskTodo);
+		}
+	}
+
+	protected void generateReport() throws Exception {
+		isGeneratingReport = true ;
+		SimReport report = new SimReportFactory(workspace,getLoadProfile(), getStore(),ResourcePool.getInstance().getResourceInstances(), getSimulationStartDate(), getSimulationEndDate(), timespan,executionStart).createSimulationReport() ;
+		reportFile = report.generate() ;
+	}
+
+	protected boolean isWaitingForAnotherActivity(RuntimeTask taskTodo,
+			SimActivity activity) {
+		boolean waiting = false ;
+		if(activity.getJoinType().equals(JoinType.AND)){
+			if(taskTodo.getTask().getIncomings() != activity.getIncomingTransitions().size()){//WAIT FOR THE OTHERS ACTIVTY
+				waiting = true ;
+				taskTodo.setStartDate(Long.MAX_VALUE) ;
+				todoList.offer(taskTodo);
+			}
+		}else if(activity.getJoinType().equals(JoinType.XOR)){
+			if(taskTodo.getTask().getIncomings() > 1){//SKIP THE EXECUTION
+				waiting = true ;
+			}
+		}
+		return waiting;
+	}
+
+	protected void initTodoList() throws Exception {
+		List<SimProcessInstance> instances = store.getStoredProcessInstances(INSTANCE_BUFFER_SIZE) ;
+		for(SimProcessInstance instance : instances){
+			for(SimActivityInstance startActivity : instance.getStartElemInstances()){
+				todoList.add(new RuntimeTask(startActivity,instance.getStartDate()));
+			}
+		}
+	}
+
+	protected long loadTodoListFromStoreAndRetrieveNextInjection(long nextInjection) throws Exception {
+		List<SimProcessInstance> instances;
+		if(currentTime >= nextInjection){//LOAD TODOLIST FROM STORE
+			instances = store.getStoredProcessInstances(INSTANCE_BUFFER_SIZE) ;
+			if(!instances.isEmpty()){
+				for(SimProcessInstance instance : instances){
+					for(SimActivityInstance startActivity : instance.getStartElemInstances()){
+						todoList.offer(new RuntimeTask(startActivity,instance.getStartDate()));
+					}
+				}
+				nextInjection = instances.get(instances.size()-1).getStartDate();
+			}else{
+				nextInjection = Long.MAX_VALUE ;
+			}
+		}
+		return nextInjection;
 	}
 
 	private void detectCycles() {
@@ -424,8 +451,10 @@ public class SimulationEngine {
 				//EXCLUSIVE TRANSITIONS PROBABILITY
 				List<List<Integer>> probabilities = new ArrayList<List<Integer>>();
 				for(int i = 0 ; i<transitions.length ; i++){
-					List<Integer> p = new ArrayList<Integer>();
-					for(int j = (int) (i > 0 ? transitions[i-1].getProbability()*100 : 0) ; j < (i > 0 ? probabilities.get(i-1).size()+transitions[i].getProbability()*100 : transitions[i].getProbability()*100); j++){
+					final int initialValue = (int) (i > 0 ? transitions[i-1].getProbability()*100 : 0);
+					final double lastValue = i > 0 ? probabilities.get(i-1).size()+transitions[i].getProbability()*100 : transitions[i].getProbability()*100;
+					List<Integer> p = new ArrayList<Integer>((int)lastValue - initialValue + 1);
+					for(int j = initialValue ; j < lastValue; j++){
 						p.add(j) ;
 					}
 					probabilities.add(p);
@@ -478,7 +507,7 @@ public class SimulationEngine {
 			long start = p.getPeriod().getBegin() ;
 			long end = p.getPeriod().getEnd() ;
 
-			if(type.equals(RepartitionType.CONSTANT)){
+			if(RepartitionType.CONSTANT.equals(type)){
 
 				long workingDuration = lp.getInjectionCalendar().getWorkingPlanningDuration(start,end) ;
 				long interval = workingDuration / nbToInject ;
