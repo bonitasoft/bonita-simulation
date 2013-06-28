@@ -71,7 +71,7 @@ public class JasperSimReport extends SimReport {
 		Map<String, String> parameters = new HashMap<String, String>();
 		parameters.put("PROCESS_NAME", processName) ;
 		parameters.put("SHOW_LINK", "Open PDF Version") ;
-		parameters.put("PDF_LINK",fileName) ;
+		parameters.put("PDF_LINK",new File(fileName).toURI().toURL().toString()) ;
 		//TODO : see JRParameter.REPORT_CLASS_LOADER to avoid to use this subreport parameter
 		parameters.put("SUBREPORT_DIR", workspace+File.separatorChar) ;
 		parameters.put("REPORT_CREATION_DATE", "Creation Date: "+new SimpleDateFormat("dd/MM/yyyy hh:mm:ss").format(new Date())) ;	
